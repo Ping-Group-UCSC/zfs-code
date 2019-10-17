@@ -1,0 +1,6 @@
+# ignore user made make.inc file
+make.inc
+# ignore compiled fortran files
+*.o
+*.x
+*.mod

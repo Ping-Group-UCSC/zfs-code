@@ -26,6 +26,7 @@ clean:
 	@printf "\n"
 	cd Basic ; make clean ; cd ..
 	cd ZFS ; make clean ; cd ..
-	rm -rf bin
+	if [ -d bin ]; then rm -rf bin ; fi
+	if [ -f make.inc ]; then rm -f make.inc ; fi
 	@printf "\n\nFinished Cleaning! :)\n\n"
 

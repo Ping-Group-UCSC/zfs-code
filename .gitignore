@@ -4,3 +4,13 @@ make.inc
 *.o
 *.x
 *.mod
+# ignore fftw
+fftw-*/
+# pdf version of README (may eventually include)
+README.pdf
+# certain files under Examples ignored
+Examples/*/Converted_Export/
+Examples/*/pw_export*
+Examples/*/temp/*.export/
+Examples/*/temp/*.wfc1
+Examples/*/zfs.out

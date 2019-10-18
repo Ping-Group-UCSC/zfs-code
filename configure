@@ -24,9 +24,7 @@ function checkArguments(){
     lempty=false
     while [ ! -z "$1" ]; do
         if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
-            printf "$description\n"
-            printf "$usage\n"
-            printf "$options"
+            printf "$description\n$usage\n$options"
             exit 0
         elif [ "$1" == "-e" ] || [ "$1" == "--empty" ]; then
             lempty=true
@@ -76,6 +74,7 @@ function findMPI_command(){
             exit 1
         fi
     else
+        lmpicom=true
         echo "${indent}Mpi compiler executable specified ... $mpicom"
     fi
 }
@@ -136,6 +135,8 @@ function findFFTW(){
 function createMakeInc(){
     # create make.inc
     cat > make.inc << EOF
+# Auto-generated make.inc file from configure
+
 mpidir = $mpidir
 mpicom = $mpicom
 

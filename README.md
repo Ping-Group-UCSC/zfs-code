@@ -11,8 +11,8 @@ This code calculates the ZFS parameter as in the article:
 
 Prerequisites:
 ------------------------------------
-* mpi fortran compiler (e.g. impi, openmpi)
-* fftw3
+* MPI Library (e.g. [Intel MPI](https://software.intel.com/en-us/mpi-library), [Open MPI](https://www.open-mpi.org/))
+* [FFTW3](http://www.fftw.org/)
 
 Quick Installation:
 ------------------------------------
@@ -20,19 +20,42 @@ Quick Installation:
     make
 ("make" will compile all code and link executables in 'bin/')
 
-Further Information:
-------------------------------------
-The calculation requires scf output with pw_export followed by conversion bash script to generate
-simple grid and wfc input files. #TODO -- add this and explain
-
-Flow of the ZFS Code:
-------------------------------------
-1. input bands to compute and location of grid of wfc files
-2. read npw, grid, and wfc
-3. calculate f1(G), f2(-G), f3(G)
-4. calculate ρ(G-G')
-5. calculate D_(ab); including ZFS parameter
-
 After Installation:
 ------------------------------------
 Try out the example calculations under the directory 'Examples/'
+<!-- * [Sine-Wave](Examples/Sine-Wave/README.md) -->
+* Sine-Wave (not added yet)
+* [NV-Diamond](Examples/NV-Diamond/README.md)
+
+Help:
+------------------------------------
+
+<details>
+<summary>FFTW3</summary>
+<p>
+Automatic installation:
+
+```bash
+./FFTW_install.sh
+```
+
+Or manual installation:
+
+```bash
+wget http://www.fftw.org/fftw-3.3.8.tar.gz
+tar -xzvf fftw-3.3.8.tar.gz
+configure
+make
+make install
+```
+</p>
+</details>
+
+Flow of the ZFS Code:
+------------------------------------
+1. input file specifies bands to compute and location of grid and wfc files
+2. read npw, grid, and wfc
+3. calculate f1(G), f2(-G), f3(G) [fft or convolution]
+4. calculate ρ(G-G')
+5. calculate D_(ab); including ZFS parameter
+

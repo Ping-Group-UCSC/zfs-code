@@ -1,7 +1,3 @@
-!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-!%%    output intro & outro   %%
-!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 module intro_outro
 
     implicit none
@@ -19,13 +15,15 @@ contains
     end subroutine calc_date_and_time
 
 
-    subroutine intro()
+    subroutine intro(prog)
     ! simple subroutine for intro printed at the beginning of the calculation
+
+        character(len=64) :: prog
 
         call calc_date_and_time()
     
         print *
-        print *, "Program ZFS v2 | TIME: begins on ", date, " at ", time
+        print *, "Program ", trim(prog), " | TIME: begins on ", date, " at ", time
         print *
 
     end subroutine intro

@@ -23,9 +23,24 @@ Quick Installation:
 After Installation:
 ------------------------------------
 Try out the example calculations under the directory 'Examples/'
-<!-- * [Sine-Wave](Examples/Sine-Wave/README.md) -->
-* Sine-Wave (not added yet)
+* [Sine-Wave](Examples/Sine-Wave/README.md)
 * [NV-Diamond](Examples/NV-Diamond/README.md)
+
+Known/Possible Issues:
+------------------------------------
+* FFT and convolution calculation of the functions f(G) give different results (see [Sine-Wave Example](Examples/Sine-Wave/README.md))
+* Possible issue (not considered by Sine-Wave Example) is larger frequencies are not correctly wrapped and padding of wavefunctions is necessary. For example in this example frequencies can go up to 6 but only up to 3 is fully tested. (Further testing on this is ongoing.)
+* Another possible issue is that the order of f1(G) and f2(G) is incorrect (need to try swapping).
+* I/O needs to be improved (a fix is in progress).
+* MPI needs further testing on diferent machines.
+* Please let me know if you run into any unexpected issues: @tjsmart
+
+To-Do:
+------------------------------------
+* Add verbosity option to zfs code
+* Add Sine-Wave example
+* Finish NV-Diamond example
+* Clean up script for Examples/ folder
 
 Help:
 ------------------------------------
@@ -44,6 +59,7 @@ Or manual installation:
 ```bash
 wget http://www.fftw.org/fftw-3.3.8.tar.gz
 tar -xzvf fftw-3.3.8.tar.gz
+cd fftw-3.3.8
 configure
 make
 make install

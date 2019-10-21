@@ -11,7 +11,7 @@ Prerequisites:
 
 Instructions:
 -----------------------------------
-0. Run scf calculation './scf.in'. This is already done with output './scf.out' and outdir './temp/'.
+0. The first step is to obtain the output of a pw.x calculation. This is already done for a 2x2x2 supercell of diamond with a single NV- center. (see input: './scf.in', output: './scf.out', and outdir: './temp/')
 1. Run conv_export.sh found at the root of the repository. This runs pw_export.x and rewrites files for zfs calculation.
 
 ```bash
@@ -23,13 +23,13 @@ Instructions:
 vim Converted_Export/grid.txt
 vim Converted_Export/wfc1_1.txt
 ```
-3. The file './zfs.in' contains the typical input for the zero-field splitting code. The file format is not flexible so be careful to not adjust it's format significantly. Further information on the input can be found in '../../ZFS/input.f90' under the subroutine 'parse_input'
+3. The file './zfs.in' contains the typical input for the zero-field splitting code. The file format is not flexible so be careful to not adjust it's format significantly. Further information on the input can be found in '../../ZFS/input.f90' under the subroutine 'parse_input'.
 
 ```bash
 vim ./zfs.in
 vim ../../ZFS/input.f90
 ```
-4. Run ZFS calculation using the acceptable options [-i] | [-in] | [-inp] | [-input]. The exact time for the calculation to finish will vary between systems but should take around 3.5 minutes to computed ZFS over all 254 bands.
+4. Run ZFS calculation using the acceptable options [-i] | [-in] | [-inp] | [-input]. The exact time for the calculation to finish will vary between systems but should take around 3.5 minutes in this case.
 
 ```bash
 ../../bin/zfs.x -i ./zfs.in > ./zfs.out

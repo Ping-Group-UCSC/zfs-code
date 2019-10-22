@@ -28,7 +28,8 @@ program main
     character(len=256)          :: file_in, export_dir
     real(dp)                    :: alat
     integer                     :: band_min, band_max, occ_up, occ_dn
-    logical                     :: direct_flag ! = .false. ! need to add this
+    logical                     :: direct_flag
+    character(len=16)           :: verbosity
 
 !< internal variables >!
     ! mpi variables
@@ -70,9 +71,9 @@ program main
 
 !< Read input file (file_G,file_w1,file_w2,alat)>!
     call command_input(file_in)
-    call parse_input(file_in, export_dir, band_min, band_max, occ_up, occ_dn, alat, direct_flag)
+    call parse_input(file_in, export_dir, band_min, band_max, occ_up, occ_dn, alat, direct_flag, verbosity)
     if ( is_root ) then
-        call print_input( file_in, export_dir, band_min, band_max, occ_up, occ_dn, alat, direct_flag)
+        call print_input( file_in, export_dir, band_min, band_max, occ_up, occ_dn, alat, direct_flag, verbosity)
     end if
 
 !< Read in number of plane waves (npw) >!
@@ -106,7 +107,7 @@ program main
         print *, indent, "computing I_zz"
     end if
 
-    call mpi_routine( direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz )
+    call mpi_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz)
     
 
 

@@ -7,8 +7,8 @@ module main_inner
     use zfs_calc,          only : calc_rho, calc_I_zz
     use mpi_var,           only : mpi_get_var
     use convtime,          only : convtime_sub
-
-    use printmod, only : printComplexArray
+    use writemod,          only : write_grid, write_wfc, write_over_grid
+    use fftwmod,           only : calc_grid_dim, reshape_wfc
 
     implicit none
 
@@ -17,7 +17,7 @@ contains
     ! To-Do can pass in min and max to do making this easy to insert in mpi loop
     ! currently 1, tot_to_do is assumed (serial)
 
-    subroutine inner_routine( direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz_out )
+    subroutine inner_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz_out)
     ! evaluates inner routine looping over loop_array values
     ! returns I_zz_out -- a portion of the I_zz value
     
@@ -26,7 +26,8 @@ contains
         integer, dimension(npw, dim_G), intent(in)      :: grid
         character(len=256), intent(in)                  :: export_dir
         integer, dimension(loop_size,3), intent(in)     :: loop_array
-        logical                                         :: direct_flag
+        logical, intent(in)                             :: direct_flag
+        character(len=16), intent(in)                   :: verbosity
 
         ! internal variables
         character(len=256)                              :: file_w1, file_w2
@@ -47,9 +48,6 @@ contains
 
         ! return variables
         complex(dp), intent(out)                        :: I_zz_out
-        
-        ! testing flag !!!!!!! delete
-        logical                                         :: ltest !!!!!!! delete
 
 
         ! get mpi variables
@@ -74,28 +72,25 @@ contains
             call read_wfc(file_w1,npw,wfc1)
             call read_wfc(file_w2,npw,wfc2)
 
+            
+
         !< Calculate f1(G), f2(-G), f3(G) >!
             allocate (f1_G(npw), f2_G(npw), f2_minusG(npw), f3_G(npw))
 
-            ltest = .false.
 
-            if (ltest) then !!!!!!! delete
-                ! call fftw_convolution(npw, dim_G, grid, wfc1, wfc1, f1_G)
+            if ( direct_flag ) then
                 call convolution(npw, dim_G, grid, wfc1, wfc1, f1_G)
-                call printComplexArray(f1_G, npw, npw)
-            else !!!!!!! delete
+                call convolution(npw, dim_G, grid, wfc2, wfc2, f2_G)
+                call convolution(npw, dim_G, grid, wfc1, wfc2, f3_G)
+            else
+                call fftw_convolution(npw, dim_G, grid, wfc1, wfc1, f1_G, verbosity, 1)
+                call fftw_convolution(npw, dim_G, grid, wfc2, wfc2, f2_G, verbosity, 2)
+                call fftw_convolution(npw, dim_G, grid, wfc1, wfc2, f3_G, verbosity, 3)
+            end if
 
-                if ( direct_flag ) then
-                    call convolution(npw, dim_G, grid, wfc1, wfc1, f1_G)
-                    call convolution(npw, dim_G, grid, wfc2, wfc2, f2_G)
-                    call convolution(npw, dim_G, grid, wfc1, wfc2, f3_G)
-                else
-                    call fftw_convolution(npw, dim_G, grid, wfc1, wfc1, f1_G)
-                    call fftw_convolution(npw, dim_G, grid, wfc2, wfc2, f2_G)
-                    call fftw_convolution(npw, dim_G, grid, wfc1, wfc2, f3_G)
-                end if
-
-            end if !!!!!!! delete
+            if ( verbosity == "high" ) then
+                call inner_verbosity(npw, dim_G, grid, wfc1, wfc2, f1_G, f2_G, f3_G)
+            end if
 
             ! call printComplexArray(f1_G, npw, npw)
 
@@ -139,6 +134,60 @@ contains
             
     
     end subroutine inner_routine
+
+
+    subroutine inner_verbosity(npw, dim_G, grid, wfc1, wfc2, f1_G, f2_G, f3_G)
+
+        integer, intent(in)                             :: npw, dim_G
+        integer, dimension(npw, dim_G), intent(in)      :: grid
+        complex(dp), dimension(npw), intent(in)         :: wfc1, wfc2, f1_G, f2_G, f3_G
+
+        ! internal
+        character(len=16)                               :: dump_dir = "zfs.dump"
+        character(len=256)                              :: dump_gr, dump_w1, dump_w2, dump_f1, dump_f2, dump_f3
+        integer, dimension(3)                           :: grid_dim
+        complex(dp), allocatable                        :: wfc(:,:,:) ! dummy for file dumping
+        integer, parameter                              :: center = 0
+
+        call calc_grid_dim(npw, grid, grid_dim)
+        allocate(wfc(grid_dim(1), grid_dim(2), grid_dim(3)))
+
+
+        call execute_command_line('if [ ! -d zfs.dump ]; then mkdir zfs.dump; fi')
+
+        dump_gr = trim(dump_dir) // "/grid.txt"
+        dump_w1 = trim(dump_dir) // "/wfc1.txt"
+        dump_w2 = trim(dump_dir) // "/wfc2.txt"
+        dump_f1 = trim(dump_dir) // "/f1_G.txt"
+        dump_f2 = trim(dump_dir) // "/f2_G.txt"
+        dump_f3 = trim(dump_dir) // "/f3_G.txt"
+        call write_grid(grid, npw, dim_G, dump_gr)
+        call write_wfc(wfc1, npw, dump_w1)
+        call write_wfc(wfc2, npw, dump_w2)
+        call write_wfc(f1_G, npw, dump_f1)
+        call write_wfc(f2_G, npw, dump_f2)
+        call write_wfc(f3_G, npw, dump_f3)
+
+
+        dump_w1 = trim(dump_dir) // "/wfc1-og.txt"
+        dump_w2 = trim(dump_dir) // "/wfc2-og.txt"
+        dump_f1 = trim(dump_dir) // "/f1_G-og.txt"
+        dump_f2 = trim(dump_dir) // "/f2_G-og.txt"
+        dump_f3 = trim(dump_dir) // "/f3_G-og.txt"
+        call reshape_wfc(npw, grid_dim, grid, wfc1, wfc, center)
+        call write_over_grid(size(shape(wfc)), shape(wfc), wfc, dump_w1)
+        call reshape_wfc(npw, grid_dim, grid, wfc2, wfc, center)
+        call write_over_grid(size(shape(wfc)), shape(wfc), wfc, dump_w2)
+        call reshape_wfc(npw, grid_dim, grid, f1_G, wfc, center)
+        call write_over_grid(size(shape(wfc)), shape(wfc), wfc, dump_f1)
+        call reshape_wfc(npw, grid_dim, grid, f2_G, wfc, center)
+        call write_over_grid(size(shape(wfc)), shape(wfc), wfc, dump_f2)
+        call reshape_wfc(npw, grid_dim, grid, f3_G, wfc, center)
+        call write_over_grid(size(shape(wfc)), shape(wfc), wfc, dump_f3)
+
+
+
+    end subroutine inner_verbosity
 
 
 end module main_inner

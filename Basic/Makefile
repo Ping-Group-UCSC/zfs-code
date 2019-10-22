@@ -8,7 +8,8 @@ basic_objects = \
 	intro_outro.o \
 	params.o \
 	printmod.o \
-	readmod.o
+	readmod.o \
+	writemod.o
 
 
 # main target
@@ -33,6 +34,9 @@ printmod.o: params.o printmod.f90
 
 readmod.o: params.o readmod.f90
 	$(FC) -c readmod.f90 $(flags)
+
+writemod.o: params.o writemod.f90
+	$(FC) -c writemod.f90 $(flags)
 
 
 # clean

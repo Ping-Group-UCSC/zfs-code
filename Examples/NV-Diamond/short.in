@@ -1,6 +1,6 @@
-NV-Diamond ZFS Calculation
+This example only reads in two bands for high verbosity mode
 export_dir = "Converted_Export"
-band_min = 1
+band_min = 127
 band_max = 128
 occ_up = 128
 occ_dn = 126

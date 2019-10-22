@@ -1,6 +1,6 @@
 # Master makefile
 
-all: basic zfs bin
+all: basic zfs bin check-config
 	@printf "\n\nFinished building ZFS code! :)\n\n"
 
 bin: zfs
@@ -9,15 +9,19 @@ bin: zfs
 	cd bin ; ln -fs ../ZFS/zfs.x . ; cd ..
 	@printf "Done making bin\n"
 
-zfs: basic
+zfs: basic check-config
 	@printf "\nMaking zfs\n"
 	cd ZFS ; make all ; cd ..
 	@printf "Done making zfs\n"
 
-basic:
+basic: check-config
 	@printf "\nMaking basic\n"
 	cd Basic ; make all ; cd ..
 	@printf "Done making basic\n"
+
+check-config:
+	@if [ ! -f make.inc ]; then printf "\nError: Missing file 'make.inc'\n\
+	Please run ./configure before continuing.\n\n"; exit 1 ; fi
 
 
 # clean

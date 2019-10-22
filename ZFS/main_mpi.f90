@@ -10,7 +10,7 @@ module main_mpi
 
 contains
 
-    subroutine mpi_routine( direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz )
+    subroutine mpi_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz)
     ! evaluates inner routine looping over loop_array values
     ! returns I_zz_out -- a portion of the I_zz value
     
@@ -20,6 +20,7 @@ contains
         character(len=256), intent(in)                  :: export_dir
         integer, dimension(loop_size,3), intent(in)     :: loop_array
         logical                                         :: direct_flag
+        character(len=16), intent(in)                   :: verbosity
         
         ! mpi variables
         integer                                         :: nproc, myrank, root_rank
@@ -71,7 +72,7 @@ contains
         ! call printIntegerArray( myloop_array, myloop_size, 3, myloop_size )
 
         ! compute inner routine
-        call inner_routine( direct_flag, npw, dim_G, grid, export_dir, myloop_size, myloop_array, myI_zz )
+        call inner_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, myloop_size, myloop_array, myI_zz)
 
 
         ! ! report myI_zz
@@ -80,7 +81,7 @@ contains
 
 
         ! collect and sum myI_zz into final I_zz
-        call MPI_REDUCE( myI_zz, I_zz, 1, MPI_DOUBLE_COMPLEX, MPI_SUM, root_rank, MPI_COMM_WORLD, ierr )
+        call MPI_REDUCE(myI_zz, I_zz, 1, MPI_DOUBLE_COMPLEX, MPI_SUM, root_rank, MPI_COMM_WORLD, ierr)
 
 
         

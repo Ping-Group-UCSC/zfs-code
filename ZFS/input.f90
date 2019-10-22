@@ -1,8 +1,6 @@
-!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-!%%      Read input file      %%
-!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 module input
+
+    use params, only : dp
 
     implicit none
 
@@ -12,12 +10,14 @@ contains
     ! reuses code from input "inpfile.f90" from QE code
     ! return name of input file "file_in"
 
-        character(len=256) :: input_file
-        character(len=256), intent(out) :: file_in
+        ! output variables
+        character(len=256), intent(out)         :: file_in
 
-        integer :: narg ! internal parameter
-        integer :: i ! dummy index
-        logical :: found
+        ! internal variables
+        character(len=256)                      :: input_file
+        integer                                 :: narg 
+        logical                                 :: found
+        integer                                 :: i ! dummy index
 
 
         found = .false.
@@ -42,7 +42,7 @@ contains
     end subroutine command_input
 
 
-    subroutine parse_input(file_in, export_dir, band_min, band_max, occ_up, occ_dn, alat, direct_flag)
+    subroutine parse_input(file_in, export_dir, band_min, band_max, occ_up, occ_dn, alat, direct_flag, verbosity)
     ! read input file
     ! ideas:
     !    -> read in export_dir, band_min, band_max, occ_min, occ_dn, alat
@@ -62,13 +62,14 @@ contains
     ! occ_dn = 126                     ! number of spin down occupied states
     ! alat = 7.1365880966D0            ! lattice constant in angstrom
     ! direct_flag = .false.            ! if true, preform direct convolution instead of fft
+    ! verbosity = "low"                ! if set 'high' everything print to dump directory
 
-        use params, only : dp
         character(len=256), intent(in)      :: file_in
         character(len=256), intent(out)     :: export_dir
         integer, intent(out)                :: band_min, band_max, occ_up, occ_dn
         real(dp), intent(out)               :: alat
         logical, intent(out)                :: direct_flag
+        character(len=16), intent(out)      :: verbosity
 
         character(len=20) :: label        ! internal value; ignored
         character(len=10) :: separator    ! internal value; ignored
@@ -83,15 +84,14 @@ contains
           read(2,*) label, separator, occ_dn
           read(2,*) label, separator, alat
           read(2,*) label, separator, direct_flag
+          read(2,*) label, separator, verbosity
         close(2)
 
     end subroutine
     
 
-    subroutine print_input ( file_in, export_dir, band_min, band_max, occ_up, occ_dn, alat, direct_flag )
+    subroutine print_input (file_in, export_dir, band_min, band_max, occ_up, occ_dn, alat, direct_flag, verbosity)
     ! print parsed input for user
-
-        use params, only : dp
 
         ! input variables
         character(len=256), intent(in)  :: file_in
@@ -99,6 +99,7 @@ contains
         integer, intent(in)             :: band_min, band_max, occ_up, occ_dn
         real(dp), intent(in)            :: alat
         logical, intent(in)             :: direct_flag
+        character(len=16), intent(in)   :: verbosity
 
         ! internal variables
         character(len=4) :: indent="    "
@@ -114,6 +115,7 @@ contains
         else
             print *," ",                   indent, "Convolution             : ", " FFT"
         end if
+        print *," ",                   indent, "Verbosity               : ", " ", trim(verbosity)
 
         print *
         

@@ -1,53 +1,8 @@
 !
-!
 !  Original Version Created Wed. June 19th 2019 by Tyler J. Smart
 !  This code calculates the ZFS parameter as in the PRB:
 !    ”First principles method for the calculation of zero-field splitting tensors in periodic systems”,
 !    M. J. Rayson and P. R. Briddon, Physical Review B 77, 035119 (2008)
-!  The calculation requires scf output with pw_export followed by conversion bash script to generate
-!  simple grid and wfc input files.
-!
-!  The flow of the calculation is as follows:
-!    1. input bands to compute and location of grid of wfc files
-!    2. read npw, grid, and wfc
-!    3. calculate f1(G), f2(-G), f3(G)
-!    4. calculate ρ(G-G')
-!    5. calculate D_(ab); including ZFS parameter
-!
-!
-
-!   Old To-do (written 6/26/19)
-!       1. removing extra implicit none's -- done
-!       2. implement timing -- done
-!       3. double precision for all -- done
-!       4. subroutines moved to modules -- done
-!       5. deallocating? -- done
-!       6. openMP -- done
-
-! To-do (written 7/17/19)
-!   high-priority:
-!       1. accurate timing
-!       2. improved output
-!           -> reduced printing
-!           -> from num_to_do calculate a progress bar (for each ispin) from 0-100% (similar to YAMBO)
-!       3. MPI
-!       4. testing (collect data and speed)
-!           -> full band
-!           -> supercell
-!           -> cutoff (may revisit this)
-!       5. fix looping #DONE
-!       6. add i=j for ispin=2 #DONE
-!           -> easiest to let j_min = i (instead of i+1) and add if statement to check if ispin=1/3 then break
-!
-!   low-priority:
-!       1. read binary files (iotk)
-!       2. implement FFT (FFTW)
-!       3. further options & control from input file
-!           -> verbosity mode
-!           -> freedom in order of input
-!           -> default options
-!       4. clean commenting
-!       5. move overgrown routines to subroutines
 !
 
 
@@ -73,7 +28,8 @@ program main
     character(len=256)          :: file_in, export_dir
     real(dp)                    :: alat
     integer                     :: band_min, band_max, occ_up, occ_dn
-    logical                     :: direct_flag ! = .false. ! need to add this
+    logical                     :: direct_flag
+    character(len=16)           :: verbosity
 
 !< internal variables >!
     ! mpi variables
@@ -93,6 +49,7 @@ program main
     complex(dp)                 :: I_zz
     ! other
     character(len=4)            :: indent="    "
+    character(len=64)           :: prog="ZFS"
 
 !< output variables >!
     ! ZFS parameters in eV, GHz, and cm-1
@@ -109,14 +66,14 @@ program main
 
 !< print introduction >!
     if ( is_root ) then
-        call intro()
+        call intro(prog)
     end if
 
 !< Read input file (file_G,file_w1,file_w2,alat)>!
     call command_input(file_in)
-    call parse_input(file_in, export_dir, band_min, band_max, occ_up, occ_dn, alat, direct_flag)
+    call parse_input(file_in, export_dir, band_min, band_max, occ_up, occ_dn, alat, direct_flag, verbosity)
     if ( is_root ) then
-        call print_input( file_in, export_dir, band_min, band_max, occ_up, occ_dn, alat, direct_flag)
+        call print_input( file_in, export_dir, band_min, band_max, occ_up, occ_dn, alat, direct_flag, verbosity)
     end if
 
 !< Read in number of plane waves (npw) >!
@@ -150,7 +107,7 @@ program main
         print *, indent, "computing I_zz"
     end if
 
-    call mpi_routine( direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz )
+    call mpi_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz)
     
 
 

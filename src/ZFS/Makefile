@@ -1,6 +1,6 @@
 # Makefile for ZFS
 
-include ../make.inc
+include ../../make.inc
 
 zfs_objects = \
 	input.o \

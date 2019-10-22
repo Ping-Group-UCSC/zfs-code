@@ -16,6 +16,8 @@ fftwurl="http://www.fftw.org/fftw-${fftwver}.tar.gz"
 fftwtar="fftw-${fftwver}.tar.gz"
 fftwdir="fftw-${fftwver}"
 lfftdir=false
+hdir=$PWD
+installdir=".."
 
 
 ############################## funcitons ##############################
@@ -72,6 +74,7 @@ function installFFTW(){
 
 
 function installFFTWInternal(){
+    cd $installdir
     echo "wget $fftwurl"
     if wget $fftwurl ; then
         echo "tar -xzvf $fftwtar"; tar -xzvf $fftwtar
@@ -81,8 +84,10 @@ function installFFTWInternal(){
         echo "make install"; make install
         echo "cd .."; cd ..
         echo "rm -f $fftwtar"; rm -f $fftwtar
+        cd $hdir
     else
         echo "Error: Unable to download FFTW"
+        cd $hdir
         exit 1
     fi
 }

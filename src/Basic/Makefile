@@ -1,6 +1,6 @@
 # Makefile for Basic
 
-include ../make.inc
+include ../../make.inc
 
 basic_objects = \
 	convtime.o \

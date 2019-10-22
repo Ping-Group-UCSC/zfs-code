@@ -37,10 +37,10 @@ Known/Possible Issues:
 
 To-Do:
 ------------------------------------
-* Add verbosity option to zfs code
+* Add verbosity option to zfs code -- DONE
 * Add Sine-Wave example
 * Finish NV-Diamond example
-* Clean up script for Examples/ folder
+* Clean up script for Examples/ folder -- DONE
 
 Help:
 ------------------------------------
@@ -51,6 +51,7 @@ Help:
 Automatic installation:
 
 ```bash
+cd scripts
 ./FFTW_install.sh
 ```
 

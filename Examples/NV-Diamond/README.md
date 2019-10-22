@@ -15,7 +15,7 @@ Instructions:
 1. Run conv_export.sh found at the root of the repository. This runs pw_export.x and rewrites files for zfs calculation.
 
 ```bash
-../../conv_export.sh di temp
+../../scripts/conv_export.sh di temp
 ```
 2. You can now view the list of g-vectors in 'Converted_Export/grid.txt' and wfc files in 'Converted_Export/wfc(spin)_(band).txt'
 
@@ -23,11 +23,11 @@ Instructions:
 vim Converted_Export/grid.txt
 vim Converted_Export/wfc1_1.txt
 ```
-3. The file './zfs.in' contains the typical input for the zero-field splitting code. The file format is not flexible so be careful to not adjust it's format significantly. Further information on the input can be found in '../../ZFS/input.f90' under the subroutine 'parse_input'.
+3. The file './zfs.in' contains the typical input for the zero-field splitting code. The file format is not flexible so be careful to not adjust it's format significantly. Further information on the input can be found in '../../src/ZFS/input.f90' under the subroutine 'parse_input'.
 
 ```bash
 vim ./zfs.in
-vim ../../ZFS/input.f90
+vim ../../src/ZFS/input.f90
 ```
 4. Run ZFS calculation using the acceptable options [-i] | [-in] | [-inp] | [-input]. The exact time for the calculation to finish will vary between systems but should take around 3.5 minutes in this case.
 

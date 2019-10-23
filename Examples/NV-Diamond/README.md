@@ -11,19 +11,19 @@ Prerequisites:
 
 Instructions:
 -----------------------------------
-0. The first step is to obtain the output of a pw.x calculation. This is already done for a 2x2x2 supercell of diamond with a single NV- center. (see input: './scf.in', output: './scf.out', and outdir: './temp/')
+0. The first step is to obtain the output of a pw.x calculation. This is already done for a 2x2x2 supercell of diamond with a single NV- center. (see input: `./scf.in`, output: `./scf.out`, and outdir: `./temp/`)
 1. Run conv_export.sh found at the root of the repository. This runs pw_export.x and rewrites files for zfs calculation.
 
 ```bash
 ../../scripts/conv_export.sh di temp
 ```
-2. You can now view the list of g-vectors in 'Converted_Export/grid.txt' and wfc files in 'Converted_Export/wfc(spin)_(band).txt'
+2. You can now view the list of g-vectors in `./Converted_Export/grid.txt` and wfc files in `./Converted_Export/wfc(spin)_(band).txt`
 
 ```bash
 vim Converted_Export/grid.txt
 vim Converted_Export/wfc1_1.txt
 ```
-3. The file './zfs.in' contains the typical input for the zero-field splitting code. The file format is not flexible so be careful to not adjust it's format significantly. Further information on the input can be found in '../../src/ZFS/input.f90' under the subroutine 'parse_input'.
+3. The file `./zfs.in` contains the typical input for the zero-field splitting code. The file format is not flexible so be careful to not adjust it's format significantly. Further information on the input can be found in `../../src/ZFS/input.f90` under the subroutine `parse_input`.
 
 ```bash
 vim ./zfs.in

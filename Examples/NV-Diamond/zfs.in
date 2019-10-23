@@ -6,4 +6,4 @@ occ_up = 128
 occ_dn = 126
 alat = 7.1365880966D0
 direct_flag = .false.
-verbosity = "high"
+verbosity = "low"

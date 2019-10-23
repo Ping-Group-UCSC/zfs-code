@@ -151,7 +151,7 @@ contains
 
         call calc_grid_dim(npw, grid, grid_dim)
         allocate(wfc(grid_dim(1), grid_dim(2), grid_dim(3)))
-
+        wfc = complex(0, 0)
 
         call execute_command_line('if [ ! -d zfs.dump ]; then mkdir zfs.dump; fi')
 

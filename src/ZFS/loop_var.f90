@@ -58,9 +58,9 @@ contains
         ! output variables
         character (len=256), intent(out)    :: file_i, file_j
 
-        ! convert i and j to strings
-        write (str_iband, "(i5)") loop_array_piece(2)
-        write (str_jband, "(i5)") loop_array_piece(3)
+        ! convert i and j to strings -- flipped which file is read by wfc1 and wfc2 compared to older implementation
+        write (str_iband, "(i5)") loop_array_piece(3)
+        write (str_jband, "(i5)") loop_array_piece(2)
 
         ! define prefix of wfc file names
         if ( loop_array_piece(1) == 1 ) then

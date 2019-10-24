@@ -40,7 +40,11 @@ less ./Export/grid.txt
 <img src="https://latex.codecogs.com/gif.latex?\psi_2(G_x,G_yG_z)=\frac{i}{2}&space;\delta&space;(G_x-2&space;)&space;\delta&space;(G_y)&space;\delta&space;(G_z)-\frac{i}{2}&space;\delta&space;(G_x&plus;2&space;)&space;\delta&space;(G_y)&space;\delta&space;(G_z)&space;\\&space;\text{\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;}&plus;\frac{i}{2}&space;\delta&space;(G_x)&space;\delta&space;(G_y-1&space;)&space;\delta&space;(G_z)-\frac{i}{2}&space;\delta&space;(G_x)&space;\delta&space;(G_y&plus;1&space;)&space;\delta&space;(G_z)&space;\\&space;\text{\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;\&space;}&plus;\frac{i}{2}&space;\delta&space;(G_x)&space;\delta&space;(G_y-2&space;)&space;\delta&space;(G_z)-\frac{i}{2}&space;\delta&space;(G_x)&space;\delta&space;(G_y&plus;2&space;)&space;\delta&space;(G_z)"/><br>
 
 
+<<<<<<< HEAD
 <img src="https://latex.codecogs.com/gif.latex?\dpi{120}&space;\small&space;\Big(\text{Recall,\&space;}\mathcal{F}\{\sin(ax)\}=\mathcal{F}\{-i/2\left[e^{iax}-e^{-iax}\right]\}=i/2\left[\delta(G_x-a)-\delta(G_x&plus;a)\right]\Big)"/>
+=======
+![fourier transform of sine](https://latex.codecogs.com/gif.latex?\Big(\text{Recall,\ }\mathcal{F}\\{\sin(ax)\\}=\mathcal{F}\\{-i/2\left[e^{iax}-e^{-iax}\right]\\}=i/2\left[\delta(G_x-a)-\delta(G_x+a)\right]\Big))
+>>>>>>> 7aa96aef63df8e0c19b8c153c279e15ccd941620
 
 4. Run the python script `./Scripts/generate_wfc.py` to generate the above wfc's.
 

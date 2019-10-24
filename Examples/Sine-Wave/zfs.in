@@ -1,0 +1,9 @@
+Simple Sine Function Example
+export_dir = "Export"
+band_min = 1
+band_max = 2
+occ_up = 2
+occ_dn = 0
+alat = 1.D0
+direct_flag = .false.
+verbosity = "high"

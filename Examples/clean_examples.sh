@@ -8,8 +8,7 @@ usage="Usage: ./clean_examples.sh [-h, --help] || [options]\n"
 options="Options: \n\
     [-h, --help]        print help menu\n\
     [-s, --sine]        only clean Examples/Sine-Wave folder\n\
-    [-d, --diam]        only clean Examples/NV-Diamond folder\n\
-    "
+    [-d, --diam]        only clean Examples/NV-Diamond folder\n"
 indent="    "
 files="\
     Examples/*/Converted_Export/ \
@@ -20,6 +19,7 @@ files="\
     Examples/*/zfs.out \
     Examples/*/zfs.dump/ \
     Examples/Sine-Wave/Export/wfc1_*.txt \
+    Examples/Sine-Wave/*_r.eps \
     " # copied and pasted from .gitignore -- but don't want to assume .gitignore exists or is the same
 pathToExamples='..' # change me if file is moved!!!
 

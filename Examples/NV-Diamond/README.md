@@ -32,7 +32,7 @@ vim ../../src/ZFS/input.f90
 4. Run ZFS calculation using the acceptable options [-i] | [-in] | [-inp] | [-input]. The exact time for the calculation to finish will vary between systems but should take around 3.5 minutes in this case.
 
 ```bash
-../../bin/zfs.x -i ./zfs.in > ./zfs.out
+../../bin/zfs.x -i ./zfs.in | tee ./zfs.out
 ```
 5. The final ZFS is can be grepped from the file output.
 

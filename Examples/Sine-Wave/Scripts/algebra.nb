@@ -1,0 +1,847 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     33221,        839]
+NotebookOptionsPosition[     31346,        775]
+NotebookOutlinePosition[     31680,        790]
+CellTagsIndexPosition[     31637,        787]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"tpi", "=", 
+   RowBox[{"2", "\[Pi]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.780853755304501*^9, 3.780853763892206*^9}, 
+   3.78085381554793*^9}],
+
+Cell["\[Psi]1(G)", "Text",
+ CellFrame->{{0, 0}, {0, 3}},
+ CellChangeTimes->{{3.7808535896410713`*^9, 3.780853591941177*^9}, {
+  3.780930374229145*^9, 3.780930377158915*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"\[Psi]1", "[", 
+   RowBox[{"x_", ",", "y_", ",", "z_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    FractionBox["1", 
+     RowBox[{
+      SuperscriptBox["\[Pi]", 
+       RowBox[{"3", "/", "2"}]], "2", 
+      SqrtBox["2"]}]], 
+    RowBox[{"Sin", "[", 
+     RowBox[{"1", "*", "tpi", "*", "x"}], "]"}]}], "+", 
+   RowBox[{"Sin", "[", 
+    RowBox[{"3", "*", "tpi", "*", "x"}], "]"}], "+", 
+   RowBox[{"Sin", "[", 
+    RowBox[{"2", "*", "tpi", "*", "y"}], "]"}], "+", 
+   RowBox[{"Sin", "[", 
+    RowBox[{"1", "*", "tpi", "*", "z"}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.7808518054606247`*^9, 3.780851847872123*^9}, {
+  3.780851958014537*^9, 3.7808519722720547`*^9}, {3.780853735082758*^9, 
+  3.780853737193741*^9}, {3.780853772866939*^9, 3.780853778078318*^9}, {
+  3.780930386521764*^9, 3.780930418025929*^9}, {3.780930479488546*^9, 
+  3.7809304799238*^9}, {3.780930571837901*^9, 3.780930579047274*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"FourierTransform", "[", 
+   RowBox[{
+    RowBox[{"\[Psi]1", "[", 
+     RowBox[{"x", ",", "y", ",", "z"}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"x", ",", "y", ",", "z"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"Gx", ",", "Gy", ",", "Gz"}], "}"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"StringReplace", "[", 
+  RowBox[{
+   RowBox[{"StringReplace", "[", 
+    RowBox[{
+     RowBox[{"StringReplace", "[", 
+      RowBox[{
+       RowBox[{"ToString", "[", 
+        RowBox[{"TeXForm", "[", "%", "]"}], "]"}], ",", 
+       RowBox[{"\"\<\\\\text{Gx}\>\"", "\[Rule]", "\"\<G_x\>\""}]}], "]"}], 
+     ",", 
+     RowBox[{"\"\<\\\\text{Gy}\>\"", "\[Rule]", "\"\<G_y\>\""}]}], "]"}], ",", 
+   RowBox[{"\"\<\\\\text{Gz}\>\"", "\[Rule]", "\"\<G_z\>\""}]}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.780851853903154*^9, 3.780851923839376*^9}, 
+   3.780851976189369*^9, {3.780852087084386*^9, 3.780852099028517*^9}, 
+   3.780853623186263*^9, {3.780853828779766*^9, 3.780853833735682*^9}, {
+   3.780853874641676*^9, 3.780853898917713*^9}, {3.780853969710438*^9, 
+   3.7808539742814217`*^9}, {3.78085404424482*^9, 3.7808540527922993`*^9}, 
+   3.7808540966095047`*^9, {3.780854145785139*^9, 3.78085416924505*^9}, {
+   3.780854219133131*^9, 3.780854264974093*^9}, {3.780930395816628*^9, 
+   3.780930396766529*^9}, 3.780930446954403*^9, 3.7809306958052073`*^9}],
+
+Cell[BoxData["\<\"i \\\\sqrt{2} \\\\pi ^{3/2} \\\\delta (G_x-6 \\\\pi ) \
+\\\\delta (G_y) \\\\delta (G_z)+i \\\\sqrt{2} \\\\pi ^{3/2} \\\\delta (G_x) \
+\\\\delta (G_y-4 \\\\pi ) \\\\delta (G_z)+\\\\frac{1}{2} i \\\\delta (G_x-2 \
+\\\\pi ) \\\\delta (G_y) \\\\delta (G_z)+i \\\\sqrt{2} \\\\pi ^{3/2} \
+\\\\delta (G_x) \\\\delta (G_y) \\\\delta (G_z-2 \\\\pi )-\\\\frac{1}{2} i \\\
+\\delta (G_x+2 \\\\pi ) \\\\delta (G_y) \\\\delta (G_z)-i \\\\sqrt{2} \\\\pi \
+^{3/2} \\\\delta (G_x) \\\\delta (G_y) \\\\delta (G_z+2 \\\\pi )-i \
+\\\\sqrt{2} \\\\pi ^{3/2} \\\\delta (G_x) \\\\delta (G_y+4 \\\\pi ) \\\\delta \
+(G_z)-i \\\\sqrt{2} \\\\pi ^{3/2} \\\\delta (G_x+6 \\\\pi ) \\\\delta (G_y) \
+\\\\delta (G_z)\"\>"], "Output",
+ CellChangeTimes->{
+  3.780853819025234*^9, 3.780853900025319*^9, 3.780853975141807*^9, 
+   3.7808540574999857`*^9, 3.780854098003797*^9, {3.7808541599612293`*^9, 
+   3.780854170243113*^9}, {3.780854257140148*^9, 3.780854266214067*^9}, {
+   3.780930422988449*^9, 3.780930447448053*^9}, {3.780930573446179*^9, 
+   3.78093058102667*^9}, 3.780930696423724*^9}]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.780852047337965*^9, 3.780852052575501*^9}}],
+
+Cell["\[Psi]2(G)", "Text",
+ CellFrame->{{0, 0}, {0, 3}},
+ CellChangeTimes->{{3.7808535896410713`*^9, 3.780853611941901*^9}, {
+  3.780930381719911*^9, 3.780930382910997*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"\[Psi]2", "[", 
+   RowBox[{"x_", ",", "y_", ",", "z_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    FractionBox["1", 
+     RowBox[{
+      SuperscriptBox["\[Pi]", 
+       RowBox[{"3", "/", "2"}]], "2", 
+      SqrtBox["2"]}]], 
+    RowBox[{"Sin", "[", 
+     RowBox[{"2", "*", "tpi", "*", "x"}], "]"}]}], "+", 
+   RowBox[{"Sin", "[", 
+    RowBox[{"1", "*", "tpi", "*", "y"}], "]"}], "+", 
+   RowBox[{"Sin", "[", 
+    RowBox[{"2", "*", "tpi", "*", "y"}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.7808518054606247`*^9, 3.780851847872123*^9}, {
+   3.780851958014537*^9, 3.7808519722720547`*^9}, 3.7808536142525578`*^9, {
+   3.7808537298485823`*^9, 3.780853748031556*^9}, {3.7808537786466293`*^9, 
+   3.780853779220529*^9}, {3.780930391171324*^9, 3.780930392770631*^9}, {
+   3.780930427038063*^9, 3.7809304303702383`*^9}, {3.780931211552094*^9, 
+   3.780931242209812*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"FourierTransform", "[", 
+   RowBox[{
+    RowBox[{"\[Psi]2", "[", 
+     RowBox[{"x", ",", "y", ",", "z"}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"x", ",", "y", ",", "z"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"Gx", ",", "Gy", ",", "Gz"}], "}"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"StringReplace", "[", 
+  RowBox[{
+   RowBox[{"StringReplace", "[", 
+    RowBox[{
+     RowBox[{"StringReplace", "[", 
+      RowBox[{
+       RowBox[{"ToString", "[", 
+        RowBox[{"TeXForm", "[", "%", "]"}], "]"}], ",", 
+       RowBox[{"\"\<\\\\text{Gx}\>\"", "\[Rule]", "\"\<G_x\>\""}]}], "]"}], 
+     ",", 
+     RowBox[{"\"\<\\\\text{Gy}\>\"", "\[Rule]", "\"\<G_y\>\""}]}], "]"}], ",", 
+   RowBox[{"\"\<\\\\text{Gz}\>\"", "\[Rule]", "\"\<G_z\>\""}]}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.780851853903154*^9, 3.780851923839376*^9}, 
+   3.780851976189369*^9, {3.780852087084386*^9, 3.780852099028517*^9}, {
+   3.780853616374279*^9, 3.7808536195649137`*^9}, {3.780854293412767*^9, 
+   3.78085429611668*^9}, {3.7809304000439453`*^9, 3.780930400975753*^9}}],
+
+Cell[BoxData["\<\"\\\\frac{1}{2} i \\\\delta (G_x-4 \\\\pi ) \\\\delta (G_y) \
+\\\\delta (G_z)+i \\\\sqrt{2} \\\\pi ^{3/2} \\\\delta (G_x) \\\\delta (G_y-4 \
+\\\\pi ) \\\\delta (G_z)+i \\\\sqrt{2} \\\\pi ^{3/2} \\\\delta (G_x) \
+\\\\delta (G_y-2 \\\\pi ) \\\\delta (G_z)-i \\\\sqrt{2} \\\\pi ^{3/2} \
+\\\\delta (G_x) \\\\delta (G_y+2 \\\\pi ) \\\\delta (G_z)-\\\\frac{1}{2} i \\\
+\\delta (G_x+4 \\\\pi ) \\\\delta (G_y) \\\\delta (G_z)-i \\\\sqrt{2} \\\\pi \
+^{3/2} \\\\delta (G_x) \\\\delta (G_y+4 \\\\pi ) \\\\delta (G_z)\"\>"], \
+"Output",
+ CellChangeTimes->{3.7808538229095783`*^9, 3.7808543094219418`*^9, 
+  3.780930431930365*^9, 3.7809312439369173`*^9}]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.780852047337965*^9, 3.780852052575501*^9}}],
+
+Cell["f1(G)", "Text",
+ CellFrame->{{0, 0}, {0, 3}},
+ CellChangeTimes->{{3.7808535896410713`*^9, 3.780853591941177*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"f1", "[", 
+   RowBox[{"x_", ",", "y_", ",", "z_"}], "]"}], ":=", 
+  RowBox[{
+   FractionBox["1", 
+    RowBox[{
+     SuperscriptBox["\[Pi]", 
+      RowBox[{"3", "/", "2"}]], "2", 
+     SqrtBox["2"]}]], 
+   SuperscriptBox[
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"Sin", "[", 
+       RowBox[{"1", "*", "tpi", "*", "x"}], "]"}], "+", 
+      RowBox[{"Sin", "[", 
+       RowBox[{"3", "*", "tpi", "*", "x"}], "]"}], "+", 
+      RowBox[{"Sin", "[", 
+       RowBox[{"2", "*", "tpi", "*", "y"}], "]"}], "+", 
+      RowBox[{"Sin", "[", 
+       RowBox[{"1", "*", "tpi", "*", "z"}], "]"}]}], ")"}], "2"]}]}]], "Input",\
+
+ CellChangeTimes->{{3.7808518054606247`*^9, 3.780851847872123*^9}, {
+  3.780851958014537*^9, 3.7808519722720547`*^9}, {3.780853735082758*^9, 
+  3.780853737193741*^9}, {3.780853772866939*^9, 3.780853778078318*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"FourierTransform", "[", 
+   RowBox[{
+    RowBox[{"f1", "[", 
+     RowBox[{"x", ",", "y", ",", "z"}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"x", ",", "y", ",", "z"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"Gx", ",", "Gy", ",", "Gz"}], "}"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"StringReplace", "[", 
+  RowBox[{
+   RowBox[{"StringReplace", "[", 
+    RowBox[{
+     RowBox[{"StringReplace", "[", 
+      RowBox[{
+       RowBox[{"ToString", "[", 
+        RowBox[{"TeXForm", "[", "%", "]"}], "]"}], ",", 
+       RowBox[{"\"\<\\\\text{Gx}\>\"", "\[Rule]", "\"\<G_x\>\""}]}], "]"}], 
+     ",", 
+     RowBox[{"\"\<\\\\text{Gy}\>\"", "\[Rule]", "\"\<G_y\>\""}]}], "]"}], ",", 
+   RowBox[{"\"\<\\\\text{Gz}\>\"", "\[Rule]", "\"\<G_z\>\""}]}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.780851853903154*^9, 3.780851923839376*^9}, 
+   3.780851976189369*^9, {3.780852087084386*^9, 3.780852099028517*^9}, 
+   3.780853623186263*^9, {3.780853828779766*^9, 3.780853833735682*^9}, {
+   3.780853874641676*^9, 3.780853898917713*^9}, {3.780853969710438*^9, 
+   3.7808539742814217`*^9}, {3.78085404424482*^9, 3.7808540527922993`*^9}, 
+   3.7808540966095047`*^9, {3.780854145785139*^9, 3.78085416924505*^9}, {
+   3.780854219133131*^9, 3.780854264974093*^9}}],
+
+Cell[BoxData["\<\"2 \\\\delta (G_x) \\\\delta (G_y) \\\\delta \
+(G_z)-\\\\frac{1}{4} \\\\delta (G_x-12 \\\\pi ) \\\\delta (G_y) \\\\delta \
+(G_z)-\\\\frac{1}{2} \\\\delta (G_x-8 \\\\pi ) \\\\delta (G_y) \\\\delta \
+(G_z)-\\\\frac{1}{4} \\\\delta (G_x) \\\\delta (G_y-8 \\\\pi ) \\\\delta \
+(G_z)+\\\\frac{1}{4} \\\\delta (G_x-4 \\\\pi ) \\\\delta (G_y) \\\\delta \
+(G_z)-\\\\frac{1}{2} \\\\delta (G_x-6 \\\\pi ) \\\\delta (G_y-4 \\\\pi ) \
+\\\\delta (G_z)-\\\\frac{1}{2} \\\\delta (G_x-2 \\\\pi ) \\\\delta (G_y-4 \
+\\\\pi ) \\\\delta (G_z)+\\\\frac{1}{2} \\\\delta (G_x+2 \\\\pi ) \\\\delta \
+(G_y-4 \\\\pi ) \\\\delta (G_z)+\\\\frac{1}{4} \\\\delta (G_x+4 \\\\pi ) \
+\\\\delta (G_y) \\\\delta (G_z)+\\\\frac{1}{2} \\\\delta (G_x-6 \\\\pi ) \
+\\\\delta (G_y+4 \\\\pi ) \\\\delta (G_z)+\\\\frac{1}{2} \\\\delta (G_x-2 \
+\\\\pi ) \\\\delta (G_y+4 \\\\pi ) \\\\delta (G_z)-\\\\frac{1}{2} \\\\delta \
+(G_x+2 \\\\pi ) \\\\delta (G_y+4 \\\\pi ) \\\\delta (G_z)+\\\\frac{1}{2} \
+\\\\delta (G_x+6 \\\\pi ) \\\\delta (G_y-4 \\\\pi ) \\\\delta \
+(G_z)-\\\\frac{1}{2} \\\\delta (G_x+6 \\\\pi ) \\\\delta (G_y+4 \\\\pi ) \
+\\\\delta (G_z)-\\\\frac{1}{2} \\\\delta (G_x+8 \\\\pi ) \\\\delta (G_y) \
+\\\\delta (G_z)-\\\\frac{1}{4} \\\\delta (G_x) \\\\delta (G_y+8 \\\\pi ) \
+\\\\delta (G_z)-\\\\frac{1}{4} \\\\delta (G_x+12 \\\\pi ) \\\\delta (G_y) \
+\\\\delta (G_z)-\\\\frac{1}{4} \\\\delta (G_x) \\\\delta (G_y) \\\\delta \
+(G_z-4 \\\\pi )-\\\\frac{1}{2} \\\\delta (G_x-6 \\\\pi ) \\\\delta (G_y) \
+\\\\delta (G_z-2 \\\\pi )-\\\\frac{1}{2} \\\\delta (G_x) \\\\delta (G_y-4 \
+\\\\pi ) \\\\delta (G_z-2 \\\\pi )-\\\\frac{1}{2} \\\\delta (G_x-2 \\\\pi ) \
+\\\\delta (G_y) \\\\delta (G_z-2 \\\\pi )+\\\\frac{1}{2} \\\\delta (G_x+2 \
+\\\\pi ) \\\\delta (G_y) \\\\delta (G_z-2 \\\\pi )+\\\\frac{1}{2} \\\\delta \
+(G_x-6 \\\\pi ) \\\\delta (G_y) \\\\delta (G_z+2 \\\\pi )+\\\\frac{1}{2} \
+\\\\delta (G_x) \\\\delta (G_y-4 \\\\pi ) \\\\delta (G_z+2 \\\\pi \
+)+\\\\frac{1}{2} \\\\delta (G_x-2 \\\\pi ) \\\\delta (G_y) \\\\delta (G_z+2 \
+\\\\pi )-\\\\frac{1}{2} \\\\delta (G_x+2 \\\\pi ) \\\\delta (G_y) \\\\delta \
+(G_z+2 \\\\pi )+\\\\frac{1}{2} \\\\delta (G_x) \\\\delta (G_y+4 \\\\pi ) \
+\\\\delta (G_z-2 \\\\pi )-\\\\frac{1}{2} \\\\delta (G_x) \\\\delta (G_y+4 \
+\\\\pi ) \\\\delta (G_z+2 \\\\pi )-\\\\frac{1}{4} \\\\delta (G_x) \\\\delta \
+(G_y) \\\\delta (G_z+4 \\\\pi )+\\\\frac{1}{2} \\\\delta (G_x+6 \\\\pi ) \
+\\\\delta (G_y) \\\\delta (G_z-2 \\\\pi )-\\\\frac{1}{2} \\\\delta (G_x+6 \
+\\\\pi ) \\\\delta (G_y) \\\\delta (G_z+2 \\\\pi )\"\>"], "Output",
+ CellChangeTimes->{
+  3.780853819025234*^9, 3.780853900025319*^9, 3.780853975141807*^9, 
+   3.7808540574999857`*^9, 3.780854098003797*^9, {3.7808541599612293`*^9, 
+   3.780854170243113*^9}, {3.780854257140148*^9, 3.780854266214067*^9}}]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.780852047337965*^9, 3.780852052575501*^9}}],
+
+Cell["f2(G)", "Text",
+ CellFrame->{{0, 0}, {0, 3}},
+ CellChangeTimes->{{3.7808535896410713`*^9, 3.780853611941901*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"f2", "[", 
+   RowBox[{"x_", ",", "y_", ",", "z_"}], "]"}], ":=", 
+  RowBox[{
+   FractionBox["1", 
+    RowBox[{
+     SuperscriptBox["\[Pi]", 
+      RowBox[{"3", "/", "2"}]], "2", 
+     SqrtBox["2"]}]], 
+   SuperscriptBox[
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"Sin", "[", 
+       RowBox[{"2", "*", "tpi", "*", "x"}], "]"}], "+", 
+      RowBox[{"Sin", "[", 
+       RowBox[{"1", "*", "tpi", "*", "y"}], "]"}], "+", 
+      RowBox[{"Sin", "[", 
+       RowBox[{"2", "*", "tpi", "*", "y"}], "]"}]}], ")"}], "2"]}]}]], "Input",\
+
+ CellChangeTimes->{{3.7808518054606247`*^9, 3.780851847872123*^9}, {
+   3.780851958014537*^9, 3.7808519722720547`*^9}, 3.7808536142525578`*^9, {
+   3.7808537298485823`*^9, 3.780853748031556*^9}, {3.7808537786466293`*^9, 
+   3.780853779220529*^9}, {3.7809323049549828`*^9, 3.780932321601544*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"FourierTransform", "[", 
+   RowBox[{
+    RowBox[{"f2", "[", 
+     RowBox[{"x", ",", "y", ",", "z"}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"x", ",", "y", ",", "z"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"Gx", ",", "Gy", ",", "Gz"}], "}"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"StringReplace", "[", 
+  RowBox[{
+   RowBox[{"StringReplace", "[", 
+    RowBox[{
+     RowBox[{"StringReplace", "[", 
+      RowBox[{
+       RowBox[{"ToString", "[", 
+        RowBox[{"TeXForm", "[", "%", "]"}], "]"}], ",", 
+       RowBox[{"\"\<\\\\text{Gx}\>\"", "\[Rule]", "\"\<G_x\>\""}]}], "]"}], 
+     ",", 
+     RowBox[{"\"\<\\\\text{Gy}\>\"", "\[Rule]", "\"\<G_y\>\""}]}], "]"}], ",", 
+   RowBox[{"\"\<\\\\text{Gz}\>\"", "\[Rule]", "\"\<G_z\>\""}]}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.780851853903154*^9, 3.780851923839376*^9}, 
+   3.780851976189369*^9, {3.780852087084386*^9, 3.780852099028517*^9}, {
+   3.780853616374279*^9, 3.7808536195649137`*^9}, {3.780854293412767*^9, 
+   3.78085429611668*^9}}],
+
+Cell[BoxData["\<\"\\\\frac{3 \\\\delta (G_x) \\\\delta (G_y) \\\\delta \
+(G_z)}{2}-\\\\frac{1}{4} \\\\delta (G_x-8 \\\\pi ) \\\\delta (G_y) \\\\delta \
+(G_z)-\\\\frac{1}{4} \\\\delta (G_x) \\\\delta (G_y-8 \\\\pi ) \\\\delta \
+(G_z)-\\\\frac{1}{2} \\\\delta (G_x) \\\\delta (G_y-6 \\\\pi ) \\\\delta \
+(G_z)-\\\\frac{1}{4} \\\\delta (G_x) \\\\delta (G_y-4 \\\\pi ) \\\\delta \
+(G_z)-\\\\frac{1}{2} \\\\delta (G_x-4 \\\\pi ) \\\\delta (G_y-4 \\\\pi ) \
+\\\\delta (G_z)+\\\\frac{1}{2} \\\\delta (G_x) \\\\delta (G_y-2 \\\\pi ) \
+\\\\delta (G_z)-\\\\frac{1}{2} \\\\delta (G_x-4 \\\\pi ) \\\\delta (G_y-2 \
+\\\\pi ) \\\\delta (G_z)+\\\\frac{1}{2} \\\\delta (G_x) \\\\delta (G_y+2 \
+\\\\pi ) \\\\delta (G_z)+\\\\frac{1}{2} \\\\delta (G_x-4 \\\\pi ) \\\\delta \
+(G_y+2 \\\\pi ) \\\\delta (G_z)+\\\\frac{1}{2} \\\\delta (G_x+4 \\\\pi ) \
+\\\\delta (G_y-4 \\\\pi ) \\\\delta (G_z)+\\\\frac{1}{2} \\\\delta (G_x+4 \
+\\\\pi ) \\\\delta (G_y-2 \\\\pi ) \\\\delta (G_z)-\\\\frac{1}{2} \\\\delta \
+(G_x+4 \\\\pi ) \\\\delta (G_y+2 \\\\pi ) \\\\delta (G_z)-\\\\frac{1}{4} \
+\\\\delta (G_x) \\\\delta (G_y+4 \\\\pi ) \\\\delta (G_z)+\\\\frac{1}{2} \
+\\\\delta (G_x-4 \\\\pi ) \\\\delta (G_y+4 \\\\pi ) \\\\delta \
+(G_z)-\\\\frac{1}{2} \\\\delta (G_x+4 \\\\pi ) \\\\delta (G_y+4 \\\\pi ) \
+\\\\delta (G_z)-\\\\frac{1}{2} \\\\delta (G_x) \\\\delta (G_y+6 \\\\pi ) \
+\\\\delta (G_z)-\\\\frac{1}{4} \\\\delta (G_x+8 \\\\pi ) \\\\delta (G_y) \
+\\\\delta (G_z)-\\\\frac{1}{4} \\\\delta (G_x) \\\\delta (G_y+8 \\\\pi ) \
+\\\\delta (G_z)\"\>"], "Output",
+ CellChangeTimes->{3.7808538229095783`*^9, 3.7808543094219418`*^9, 
+  3.780932332148447*^9}]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.780852047337965*^9, 3.780852052575501*^9}}],
+
+Cell["f3(G)", "Text",
+ CellFrame->{{0, 0}, {0, 3}},
+ CellChangeTimes->{{3.7808535896410713`*^9, 3.780853611941901*^9}, 
+   3.780853644968588*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"f3", "[", 
+   RowBox[{"x_", ",", "y_", ",", "z_"}], "]"}], ":=", 
+  RowBox[{
+   FractionBox["1", 
+    RowBox[{
+     SuperscriptBox["\[Pi]", 
+      RowBox[{"3", "/", "2"}]], "2", 
+     SqrtBox["2"]}]], 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Sin", "[", 
+      RowBox[{"1", "*", "tpi", "*", "x"}], "]"}], "+", 
+     RowBox[{"Sin", "[", 
+      RowBox[{"3", "*", "tpi", "*", "x"}], "]"}], "+", 
+     RowBox[{"Sin", "[", 
+      RowBox[{"2", "*", "tpi", "*", "y"}], "]"}], "+", 
+     RowBox[{"Sin", "[", 
+      RowBox[{"1", "*", "tpi", "*", "z"}], "]"}]}], ")"}], "*", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Sin", "[", 
+      RowBox[{"2", "*", "tpi", "*", "x"}], "]"}], "+", 
+     RowBox[{"Sin", "[", 
+      RowBox[{"1", "*", "tpi", "*", "y"}], "]"}], "+", 
+     RowBox[{"Sin", "[", 
+      RowBox[{"2", "*", "tpi", "*", "y"}], "]"}]}], ")"}]}]}]], "Input",
+ CellChangeTimes->{{3.7808518054606247`*^9, 3.780851847872123*^9}, {
+  3.780851958014537*^9, 3.7808519722720547`*^9}, {3.7808536142525578`*^9, 
+  3.780853643282692*^9}, {3.7808537800102863`*^9, 3.780853809164205*^9}, {
+  3.7809323110819273`*^9, 3.780932328538335*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"FourierTransform", "[", 
+   RowBox[{
+    RowBox[{"f3", "[", 
+     RowBox[{"x", ",", "y", ",", "z"}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"x", ",", "y", ",", "z"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"Gx", ",", "Gy", ",", "Gz"}], "}"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"StringReplace", "[", 
+  RowBox[{
+   RowBox[{"StringReplace", "[", 
+    RowBox[{
+     RowBox[{"StringReplace", "[", 
+      RowBox[{
+       RowBox[{"ToString", "[", 
+        RowBox[{"TeXForm", "[", "%", "]"}], "]"}], ",", 
+       RowBox[{"\"\<\\\\text{Gx}\>\"", "\[Rule]", "\"\<G_x\>\""}]}], "]"}], 
+     ",", 
+     RowBox[{"\"\<\\\\text{Gy}\>\"", "\[Rule]", "\"\<G_y\>\""}]}], "]"}], ",", 
+   RowBox[{"\"\<\\\\text{Gz}\>\"", "\[Rule]", "\"\<G_z\>\""}]}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.780851853903154*^9, 3.780851923839376*^9}, 
+   3.780851976189369*^9, {3.780852087084386*^9, 3.780852099028517*^9}, {
+   3.780853616374279*^9, 3.7808536195649137`*^9}, {3.78085429937398*^9, 
+   3.7808543037079897`*^9}}],
+
+Cell[BoxData["\<\"\\\\frac{\\\\delta (G_x) \\\\delta (G_y) \\\\delta \
+(G_z)}{2}-\\\\frac{1}{4} \\\\delta (G_x-10 \\\\pi ) \\\\delta (G_y) \\\\delta \
+(G_z)-\\\\frac{1}{4} \\\\delta (G_x) \\\\delta (G_y-8 \\\\pi ) \\\\delta \
+(G_z)-\\\\frac{1}{4} \\\\delta (G_x-6 \\\\pi ) \\\\delta (G_y) \\\\delta \
+(G_z)-\\\\frac{1}{4} \\\\delta (G_x) \\\\delta (G_y-6 \\\\pi ) \\\\delta \
+(G_z)-\\\\frac{1}{4} \\\\delta (G_x-6 \\\\pi ) \\\\delta (G_y-4 \\\\pi ) \
+\\\\delta (G_z)-\\\\frac{1}{4} \\\\delta (G_x-4 \\\\pi ) \\\\delta (G_y-4 \
+\\\\pi ) \\\\delta (G_z)+\\\\frac{1}{2} \\\\delta (G_x-2 \\\\pi ) \\\\delta \
+(G_y) \\\\delta (G_z)-\\\\frac{1}{4} \\\\delta (G_x-2 \\\\pi ) \\\\delta \
+(G_y-4 \\\\pi ) \\\\delta (G_z)+\\\\frac{1}{4} \\\\delta (G_x) \\\\delta \
+(G_y-2 \\\\pi ) \\\\delta (G_z)-\\\\frac{1}{4} \\\\delta (G_x-6 \\\\pi ) \
+\\\\delta (G_y-2 \\\\pi ) \\\\delta (G_z)-\\\\frac{1}{4} \\\\delta (G_x-2 \
+\\\\pi ) \\\\delta (G_y-2 \\\\pi ) \\\\delta (G_z)+\\\\frac{1}{2} \\\\delta \
+(G_x+2 \\\\pi ) \\\\delta (G_y) \\\\delta (G_z)+\\\\frac{1}{4} \\\\delta \
+(G_x+2 \\\\pi ) \\\\delta (G_y-4 \\\\pi ) \\\\delta (G_z)+\\\\frac{1}{4} \
+\\\\delta (G_x+2 \\\\pi ) \\\\delta (G_y-2 \\\\pi ) \\\\delta \
+(G_z)+\\\\frac{1}{4} \\\\delta (G_x) \\\\delta (G_y+2 \\\\pi ) \\\\delta \
+(G_z)+\\\\frac{1}{4} \\\\delta (G_x-6 \\\\pi ) \\\\delta (G_y+2 \\\\pi ) \
+\\\\delta (G_z)+\\\\frac{1}{4} \\\\delta (G_x-2 \\\\pi ) \\\\delta (G_y+2 \
+\\\\pi ) \\\\delta (G_z)-\\\\frac{1}{4} \\\\delta (G_x+2 \\\\pi ) \\\\delta \
+(G_y+2 \\\\pi ) \\\\delta (G_z)+\\\\frac{1}{4} \\\\delta (G_x+4 \\\\pi ) \
+\\\\delta (G_y-4 \\\\pi ) \\\\delta (G_z)+\\\\frac{1}{4} \\\\delta (G_x-6 \
+\\\\pi ) \\\\delta (G_y+4 \\\\pi ) \\\\delta (G_z)+\\\\frac{1}{4} \\\\delta \
+(G_x-4 \\\\pi ) \\\\delta (G_y+4 \\\\pi ) \\\\delta (G_z)+\\\\frac{1}{4} \
+\\\\delta (G_x-2 \\\\pi ) \\\\delta (G_y+4 \\\\pi ) \\\\delta \
+(G_z)-\\\\frac{1}{4} \\\\delta (G_x+2 \\\\pi ) \\\\delta (G_y+4 \\\\pi ) \
+\\\\delta (G_z)-\\\\frac{1}{4} \\\\delta (G_x+4 \\\\pi ) \\\\delta (G_y+4 \
+\\\\pi ) \\\\delta (G_z)-\\\\frac{1}{4} \\\\delta (G_x+6 \\\\pi ) \\\\delta \
+(G_y) \\\\delta (G_z)+\\\\frac{1}{4} \\\\delta (G_x+6 \\\\pi ) \\\\delta \
+(G_y-4 \\\\pi ) \\\\delta (G_z)+\\\\frac{1}{4} \\\\delta (G_x+6 \\\\pi ) \
+\\\\delta (G_y-2 \\\\pi ) \\\\delta (G_z)-\\\\frac{1}{4} \\\\delta (G_x+6 \
+\\\\pi ) \\\\delta (G_y+2 \\\\pi ) \\\\delta (G_z)-\\\\frac{1}{4} \\\\delta \
+(G_x+6 \\\\pi ) \\\\delta (G_y+4 \\\\pi ) \\\\delta (G_z)-\\\\frac{1}{4} \
+\\\\delta (G_x) \\\\delta (G_y+6 \\\\pi ) \\\\delta (G_z)-\\\\frac{1}{4} \
+\\\\delta (G_x) \\\\delta (G_y+8 \\\\pi ) \\\\delta (G_z)-\\\\frac{1}{4} \
+\\\\delta (G_x+10 \\\\pi ) \\\\delta (G_y) \\\\delta (G_z)-\\\\frac{1}{4} \
+\\\\delta (G_x-4 \\\\pi ) \\\\delta (G_y) \\\\delta (G_z-2 \\\\pi \
+)-\\\\frac{1}{4} \\\\delta (G_x) \\\\delta (G_y-4 \\\\pi ) \\\\delta (G_z-2 \
+\\\\pi )-\\\\frac{1}{4} \\\\delta (G_x) \\\\delta (G_y-2 \\\\pi ) \\\\delta \
+(G_z-2 \\\\pi )+\\\\frac{1}{4} \\\\delta (G_x) \\\\delta (G_y+2 \\\\pi ) \
+\\\\delta (G_z-2 \\\\pi )+\\\\frac{1}{4} \\\\delta (G_x-4 \\\\pi ) \\\\delta \
+(G_y) \\\\delta (G_z+2 \\\\pi )+\\\\frac{1}{4} \\\\delta (G_x) \\\\delta \
+(G_y-4 \\\\pi ) \\\\delta (G_z+2 \\\\pi )+\\\\frac{1}{4} \\\\delta (G_x) \
+\\\\delta (G_y-2 \\\\pi ) \\\\delta (G_z+2 \\\\pi )-\\\\frac{1}{4} \\\\delta \
+(G_x) \\\\delta (G_y+2 \\\\pi ) \\\\delta (G_z+2 \\\\pi )+\\\\frac{1}{4} \
+\\\\delta (G_x+4 \\\\pi ) \\\\delta (G_y) \\\\delta (G_z-2 \\\\pi \
+)-\\\\frac{1}{4} \\\\delta (G_x+4 \\\\pi ) \\\\delta (G_y) \\\\delta (G_z+2 \
+\\\\pi )+\\\\frac{1}{4} \\\\delta (G_x) \\\\delta (G_y+4 \\\\pi ) \\\\delta \
+(G_z-2 \\\\pi )-\\\\frac{1}{4} \\\\delta (G_x) \\\\delta (G_y+4 \\\\pi ) \
+\\\\delta (G_z+2 \\\\pi )\"\>"], "Output",
+ CellChangeTimes->{3.7808538518170757`*^9, 3.7808543128107977`*^9, 
+  3.780932341617786*^9}]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.78085367761344*^9, 3.780853679335966*^9}}],
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", "\[IndentingNewLine]", 
+  "\[IndentingNewLine]"}]], "Input",
+ CellChangeTimes->{{3.780932292047969*^9, 3.7809322922634087`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  SuperscriptBox[
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Sin", "[", 
+      RowBox[{"1", "*", "x"}], "]"}], "+", 
+     RowBox[{"Sin", "[", 
+      RowBox[{"3", "*", "x"}], "]"}], "+", 
+     RowBox[{"Sin", "[", 
+      RowBox[{"2", "*", "y"}], "]"}], "+", 
+     RowBox[{"Sin", "[", 
+      RowBox[{"1", "*", "z"}], "]"}]}], ")"}], "2"], "//", 
+  "TrigReduce"}], "\[IndentingNewLine]", 
+ RowBox[{"TeXForm", "[", "%", "]"}]}], "Input",
+ CellChangeTimes->{{3.780934489361779*^9, 3.7809345315619497`*^9}, {
+  3.78093481785817*^9, 3.78093481810166*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["1", "2"], " ", 
+  RowBox[{"(", 
+   RowBox[{"4", "+", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"2", " ", "x"}], "]"}], "-", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{"4", " ", "x"}], "]"}]}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"6", " ", "x"}], "]"}], "+", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{"x", "-", 
+       RowBox[{"2", " ", "y"}]}], "]"}]}], "+", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{
+       RowBox[{"3", " ", "x"}], "-", 
+       RowBox[{"2", " ", "y"}]}], "]"}]}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"4", " ", "y"}], "]"}], "-", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{"x", "+", 
+       RowBox[{"2", " ", "y"}]}], "]"}]}], "-", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{
+       RowBox[{"3", " ", "x"}], "+", 
+       RowBox[{"2", " ", "y"}]}], "]"}]}], "+", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{"x", "-", "z"}], "]"}]}], "+", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{
+       RowBox[{"3", " ", "x"}], "-", "z"}], "]"}]}], "+", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{
+       RowBox[{"2", " ", "y"}], "-", "z"}], "]"}]}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"2", " ", "z"}], "]"}], "-", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{"x", "+", "z"}], "]"}]}], "-", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{
+       RowBox[{"3", " ", "x"}], "+", "z"}], "]"}]}], "-", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{
+       RowBox[{"2", " ", "y"}], "+", "z"}], "]"}]}]}], ")"}]}]], "Output",
+ CellChangeTimes->{3.780934493048308*^9, 3.780934543220195*^9, 
+  3.780934824751086*^9}],
+
+Cell["\<\
+\\frac{1}{2} (2 \\cos (x-2 y)+2 \\cos (3 x-2 y)-2 \\cos (x+2 y)-2 \\cos (3 \
+x+2 y)+2 \\cos (x-z)+2 \\cos (3 x-z)-2 \\cos (x+z)-2 \\cos (3 x+z)+\\cos (2 \
+x)-2 \\cos (4 x)-\\cos (6 x)+2 \\cos (2 y-z)-2 \\cos (2
+   y+z)-\\cos (4 y)-\\cos (2 z)+4)\
+\>", "Output",
+ CellChangeTimes->{3.780934493048308*^9, 3.780934543220195*^9, 
+  3.78093482482157*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  SuperscriptBox[
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Sin", "[", 
+      RowBox[{"2", "*", "x"}], "]"}], "+", 
+     RowBox[{"Sin", "[", 
+      RowBox[{"1", "*", "y"}], "]"}], "+", 
+     RowBox[{"Sin", "[", 
+      RowBox[{"2", "*", "y"}], "]"}]}], ")"}], "2"], "//", 
+  "TrigReduce"}], "\[IndentingNewLine]", 
+ RowBox[{"TeXForm", "[", "%", "]"}]}], "Input",
+ CellChangeTimes->{{3.780933881286001*^9, 3.780933893077126*^9}, {
+  3.780933923504303*^9, 3.780933929998293*^9}, {3.7809340267146378`*^9, 
+  3.780934033106825*^9}, {3.780934806933158*^9, 3.780934814542704*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["1", "2"], " ", 
+  RowBox[{"(", 
+   RowBox[{"3", "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"4", " ", "x"}], "]"}], "+", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{
+       RowBox[{"2", " ", "x"}], "-", 
+       RowBox[{"2", " ", "y"}]}], "]"}]}], "+", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{
+       RowBox[{"2", " ", "x"}], "-", "y"}], "]"}]}], "+", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", "y", "]"}]}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"2", " ", "y"}], "]"}], "-", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{"3", " ", "y"}], "]"}]}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"4", " ", "y"}], "]"}], "-", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{
+       RowBox[{"2", " ", "x"}], "+", "y"}], "]"}]}], "-", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{
+       RowBox[{"2", " ", "x"}], "+", 
+       RowBox[{"2", " ", "y"}]}], "]"}]}]}], ")"}]}]], "Output",
+ CellChangeTimes->{{3.7809338896154547`*^9, 3.780933893378786*^9}, {
+   3.780933925846505*^9, 3.7809339303446817`*^9}, {3.780934028457634*^9, 
+   3.780934033930326*^9}, 3.7809348258156347`*^9}],
+
+Cell["\<\
+\\frac{1}{2} (2 \\cos (2 x-2 y)+2 \\cos (2 x-y)-2 \\cos (2 x+y)-2 \\cos (2 \
+x+2 y)-\\cos (4 x)+2 \\cos (y)-\\cos (2 y)-2 \\cos (3 y)-\\cos (4 y)+3)\
+\>", "Output",
+ CellChangeTimes->{{3.7809338896154547`*^9, 3.780933893378786*^9}, {
+   3.780933925846505*^9, 3.7809339303446817`*^9}, {3.780934028457634*^9, 
+   3.780934033930326*^9}, 3.7809348258853197`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Sin", "[", 
+      RowBox[{"1", "*", "x"}], "]"}], "+", 
+     RowBox[{"Sin", "[", 
+      RowBox[{"3", "*", "x"}], "]"}], "+", 
+     RowBox[{"Sin", "[", 
+      RowBox[{"2", "*", "y"}], "]"}], "+", 
+     RowBox[{"Sin", "[", 
+      RowBox[{"1", "*", "z"}], "]"}]}], ")"}], "*", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Sin", "[", 
+      RowBox[{"2", "*", "x"}], "]"}], "+", 
+     RowBox[{"Sin", "[", 
+      RowBox[{"1", "*", "y"}], "]"}], "+", 
+     RowBox[{"Sin", "[", 
+      RowBox[{"2", "*", "y"}], "]"}]}], ")"}]}], "//", 
+  "TrigReduce"}], "\[IndentingNewLine]", 
+ RowBox[{"TeXForm", "[", "%", "]"}]}], "Input",
+ CellChangeTimes->{{3.78093450559097*^9, 3.7809345351656017`*^9}, {
+  3.780934820749078*^9, 3.7809348210318937`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["1", "2"], " ", 
+  RowBox[{"(", 
+   RowBox[{"1", "+", 
+    RowBox[{"2", " ", 
+     RowBox[{"Cos", "[", "x", "]"}]}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"3", " ", "x"}], "]"}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"5", " ", "x"}], "]"}], "+", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"x", "-", 
+      RowBox[{"2", " ", "y"}]}], "]"}], "+", 
+    RowBox[{"Cos", "[", 
+     RowBox[{
+      RowBox[{"2", " ", "x"}], "-", 
+      RowBox[{"2", " ", "y"}]}], "]"}], "+", 
+    RowBox[{"Cos", "[", 
+     RowBox[{
+      RowBox[{"3", " ", "x"}], "-", 
+      RowBox[{"2", " ", "y"}]}], "]"}], "+", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"x", "-", "y"}], "]"}], "+", 
+    RowBox[{"Cos", "[", 
+     RowBox[{
+      RowBox[{"3", " ", "x"}], "-", "y"}], "]"}], "+", 
+    RowBox[{"Cos", "[", "y", "]"}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"3", " ", "y"}], "]"}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"4", " ", "y"}], "]"}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"x", "+", "y"}], "]"}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{
+      RowBox[{"3", " ", "x"}], "+", "y"}], "]"}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"x", "+", 
+      RowBox[{"2", " ", "y"}]}], "]"}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{
+      RowBox[{"2", " ", "x"}], "+", 
+      RowBox[{"2", " ", "y"}]}], "]"}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{
+      RowBox[{"3", " ", "x"}], "+", 
+      RowBox[{"2", " ", "y"}]}], "]"}], "+", 
+    RowBox[{"Cos", "[", 
+     RowBox[{
+      RowBox[{"2", " ", "x"}], "-", "z"}], "]"}], "+", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"y", "-", "z"}], "]"}], "+", 
+    RowBox[{"Cos", "[", 
+     RowBox[{
+      RowBox[{"2", " ", "y"}], "-", "z"}], "]"}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{
+      RowBox[{"2", " ", "x"}], "+", "z"}], "]"}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"y", "+", "z"}], "]"}], "-", 
+    RowBox[{"Cos", "[", 
+     RowBox[{
+      RowBox[{"2", " ", "y"}], "+", "z"}], "]"}]}], ")"}]}]], "Output",
+ CellChangeTimes->{3.7809345084092216`*^9, 3.780934546352261*^9, 
+  3.780934821792478*^9}],
+
+Cell["\<\
+\\frac{1}{2} (\\cos (x-2 y)+\\cos (2 x-2 y)+\\cos (3 x-2 y)+\\cos (x-y)+\\cos \
+(3 x-y)-\\cos (x+y)-\\cos (3 x+y)-\\cos (x+2 y)-\\cos (2 x+2 y)-\\cos (3 x+2 \
+y)+\\cos (2 x-z)-\\cos (2 x+z)+2 \\cos (x)-\\cos (3
+   x)-\\cos (5 x)+\\cos (y-z)+\\cos (2 y-z)-\\cos (y+z)-\\cos (2 y+z)+\\cos \
+(y)-\\cos (3 y)-\\cos (4 y)+1)\
+\>", "Output",
+ CellChangeTimes->{3.7809345084092216`*^9, 3.780934546352261*^9, 
+  3.780934821853099*^9}]
+}, Open  ]]
+},
+WindowSize->{1855, 1056},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"11.0 for Linux x86 (64-bit) (July 28, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 183, 5, 32, "Input"],
+Cell[744, 27, 173, 3, 44, "Text"],
+Cell[920, 32, 938, 23, 68, "Input"],
+Cell[CellGroupData[{
+Cell[1883, 59, 1399, 31, 60, "Input"],
+Cell[3285, 92, 1076, 15, 77, "Output"]
+}, Open  ]],
+Cell[4376, 110, 92, 1, 32, "Input"],
+Cell[4471, 113, 173, 3, 44, "Text"],
+Cell[4647, 118, 900, 22, 68, "Input"],
+Cell[CellGroupData[{
+Cell[5572, 144, 1108, 27, 60, "Input"],
+Cell[6683, 173, 659, 9, 77, "Output"]
+}, Open  ]],
+Cell[7357, 185, 92, 1, 32, "Input"],
+Cell[7452, 188, 119, 2, 44, "Text"],
+Cell[7574, 192, 862, 24, 68, "Input"],
+Cell[CellGroupData[{
+Cell[8461, 220, 1298, 30, 60, "Input"],
+Cell[9762, 252, 2779, 37, 275, "Output"]
+}, Open  ]],
+Cell[12556, 292, 92, 1, 32, "Input"],
+Cell[12651, 295, 119, 2, 44, "Text"],
+Cell[12773, 299, 860, 23, 68, "Input"],
+Cell[CellGroupData[{
+Cell[13658, 326, 1055, 27, 60, "Input"],
+Cell[14716, 355, 1624, 22, 165, "Output"]
+}, Open  ]],
+Cell[16355, 380, 92, 1, 32, "Input"],
+Cell[16450, 383, 145, 3, 44, "Text"],
+Cell[16598, 388, 1165, 31, 68, "Input"],
+Cell[CellGroupData[{
+Cell[17788, 423, 1057, 27, 60, "Input"],
+Cell[18848, 452, 3820, 51, 385, "Output"]
+}, Open  ]],
+Cell[22683, 506, 91, 1, 32, "Input"],
+Cell[22777, 509, 174, 3, 99, "Input"],
+Cell[CellGroupData[{
+Cell[22976, 516, 573, 16, 65, "Input"],
+Cell[23552, 534, 1794, 57, 79, "Output"],
+Cell[25349, 593, 359, 7, 66, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[25745, 605, 600, 15, 65, "Input"],
+Cell[26348, 622, 1217, 36, 55, "Output"],
+Cell[27568, 660, 368, 6, 48, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[27973, 671, 814, 24, 60, "Input"],
+Cell[28790, 697, 2101, 65, 79, "Output"],
+Cell[30894, 764, 436, 8, 66, "Output"]
+}, Open  ]]
+}
+]
+*)
+

@@ -18,11 +18,11 @@ Quick Installation:
 ------------------------------------
     ./configure [options]
     make
-("make" will compile all code and link executables in 'bin/')
+(`make` will compile all code and link executables in `./bin/`)
 
 After Installation:
 ------------------------------------
-Try out the example calculations under the directory 'Examples/'
+Try out the example calculations under the directory `./Examples/`
 * [Sine-Wave](Examples/Sine-Wave/README.md)
 * [NV-Diamond](Examples/NV-Diamond/README.md)
 

@@ -1,0 +1,9 @@
+Simple Sine Function Example With Direct Convolution
+export_dir = "Export"
+band_min = 1
+band_max = 2
+occ_up = 2
+occ_dn = 0
+alat = 1.D0
+direct_flag = .true.
+verbosity = "high"

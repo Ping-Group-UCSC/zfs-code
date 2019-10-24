@@ -163,6 +163,8 @@ contains
         character(len=16)                               :: dump_dir = "zfs.dump"
         character(len=256)                              :: dump_f
 
+        wfc = complex(0, 0)
+        
         call execute_command_line('if [ ! -d zfs.dump ]; then mkdir zfs.dump; fi')
 
         if ( step == 1 ) then

@@ -18,8 +18,10 @@ files="\
     Examples/*/short.out \
     Examples/*/zfs.out \
     Examples/*/zfs.dump/ \
+    Examples/Sine-Wave/zfs-conv.out \
     Examples/Sine-Wave/Export/wfc1_*.txt \
     Examples/Sine-Wave/*_r.eps \
+    Examples/Sine-Wave/fft-vs-con_*.eps
     " # copied and pasted from .gitignore -- but don't want to assume .gitignore exists or is the same
 pathToExamples='..' # change me if file is moved!!!
 

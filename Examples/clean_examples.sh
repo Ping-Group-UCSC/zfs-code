@@ -76,10 +76,10 @@ function cleanExamples(){
 lsine=true ; ldiam=true
 checkArguments $@
 echo "Cleaning Examples Folders"
-if ! lsine; then
+if ! $lsine; then
     echo "${indent}Skipping over Examples/Sine-Wave (warning not-implemented!!)" #TODO
 fi
-if ! ldiam; then
+if ! $ldiam; then
     echo "${indent}Skipping over Examples/NV-Diamond (warning not-implemented!!)" #TODO
 fi
 confirmRemoval

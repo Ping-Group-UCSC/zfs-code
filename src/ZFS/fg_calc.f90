@@ -116,8 +116,8 @@ contains
         ! TODO -- here we can make wfc1 & wfc2 artificially larger with extra padded zeroes
         allocate(wfc1_g(grid_dim(1), grid_dim(2), grid_dim(3)))
         allocate(wfc2_g(grid_dim(1), grid_dim(2), grid_dim(3)))
-        wfc1_g = complex(0, 0)
-        wfc2_g = complex(0, 0)
+        wfc1_g = cmplx(0.0_dp, 0.0_dp)
+        wfc2_g = cmplx(0.0_dp, 0.0_dp)
         ! reshape to rank 3 over grid explicit with positive indices following fftw structure
         call reshape_wfc(npw, grid_dim, grid, wfc1, wfc1_g, center)
         call reshape_wfc(npw, grid_dim, grid, wfc2, wfc2_g, center)
@@ -163,7 +163,7 @@ contains
         character(len=16)                               :: dump_dir = "zfs.dump"
         character(len=256)                              :: dump_f
 
-        wfc = complex(0, 0)
+        wfc = cmplx(0.0_dp, 0.0_dp)
         
         call execute_command_line('if [ ! -d zfs.dump ]; then mkdir zfs.dump; fi')
 

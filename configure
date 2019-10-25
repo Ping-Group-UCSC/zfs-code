@@ -62,7 +62,7 @@ function findMPI_command(){
         lmpicom=false
         echo "${indent}Mpi compiler executable specified ... no"
         for mpicom in $mpicommands; do
-            if type ${1}$mpicom > /dev/null ; then
+            if type ${1}$mpicom > /dev/null 2>&1 ; then
                 echo "${indent}Found mpi compiler ... $mpicom"
                 lmpicom=true
                 break
@@ -96,7 +96,7 @@ function findMPI(){
         echo "${indent}Mpi compiler path specified ... $mpidir"
         findMPI_command "$mpidir/"
     fi
-    if type $mpidir/$mpicom > /dev/null ; then
+    if type $mpidir/$mpicom > /dev/null 2>&1 ; then
         echo "${indent}Confirmed mpi command '$mpidir/$mpicom' exists ... yes"
     else
         echo "Error: Command '$mpidir/$mpicom' does not exist or is not executable."

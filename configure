@@ -7,14 +7,15 @@ description="Description: This script auto-generates a make.inc file for make co
 usage="Usage: ./configure [-h, --help] || [options]\n"
 options="Options: \n\
     [-h, --help]            print help menu\n\
-    [-d, --mpidir] mpidir   path to mpi binary (e.g. '~/.openmpi/bin')\n\
+    [-m, --mpidir] mpidir   path to mpi (e.g. '~/.openmpi' or '/usr')\n\
+    [-f, --fftdir] fftdir   path to fft (e.g. '/usr/local' or '~/.fftw-3.3.8')\n\
     [-c, --mpicom] mpicom   mpi executable used to compile code (e.g. 'mpifort')\n\
-    [-f, --fftdir] fftdir   path to fft header files (e.g. '/usr/local/include')\n\
     [-e, --empty]           create empty 'make.inc' file for manual editing (overrides other options)\n"
 mpicommands="mpifort mpiifort mpif90 mpif77"
+lfftdir=false
 indent="    "
-fftdirs="/usr/include /usr/local/include"
 fftwfile="fftw3.f03"
+scriptdir=$(dirname $0)
 
 
 ############################## funcitons ##############################
@@ -29,9 +30,17 @@ function checkArguments(){
         elif [ "$1" == "-e" ] || [ "$1" == "--empty" ]; then
             lempty=true
             break
-        elif [ "$1" == "-d" ] || [ "$1" == "--mpidir" ]; then
+        elif [ "$1" == "-m" ] || [ "$1" == "--mpidir" ]; then
             if [ -d "$2" ]; then
                 mpidir=$(realpath $2)
+                shift ; shift
+            else
+                echo "Error: Directory '$2' does not exist"
+                exit 1
+            fi
+        elif [ "$1" == "-f" ] || [ "$1" == "--fftdir" ]; then
+            if [ -d "$2" ]; then
+                fftdir=$(realpath $2)
                 shift ; shift
             else
                 echo "Error: Directory '$2' does not exist"
@@ -40,14 +49,6 @@ function checkArguments(){
         elif [ "$1" == "-c" ] || [ "$1" == "--mpicom" ]; then
             mpicom=$2
             shift ; shift
-        elif [ "$1" == "-f" ] || [ "$1" == "--fftdir" ]; then
-            if [ -d "$2" ]; then
-                fftdirs=$(echo "$(realpath $2) $fftdirs")
-                shift ; shift
-            else
-                echo "Error: Directory '$2' does not exist"
-                exit 1
-            fi
         else
             echo "Error: Command line option '$1' is not recognized"
             exit 1
@@ -86,20 +87,37 @@ function findMPI(){
         echo "${indent}Mpi compiler path specified ... no"
         findMPI_command
         mpidir=$(dirname $(which $mpicom))
+        fixMPIdir
         if [ ! -d "$mpidir" ]; then
             printf "Error: Could not resolve location of mpi compiler '$mpicom'. \n\
-            Please use option [-d] to specify path to mpi compiler.\n"
+            Please use option [-m] to specify path to mpi compiler.\n"
             exit 1
         fi
         echo "${indent}Found mpi compiler path ... $mpidir"
     else
         echo "${indent}Mpi compiler path specified ... $mpidir"
-        findMPI_command "$mpidir/"
+        findMPI_command "$mpidir/bin/"
     fi
-    if type $mpidir/$mpicom > /dev/null 2>&1 ; then
-        echo "${indent}Confirmed mpi command '$mpidir/$mpicom' exists ... yes"
+    if type $mpidir/bin/$mpicom > /dev/null 2>&1 ; then
+        echo "${indent}Confirmed mpi command '$mpidir/bin/$mpicom' exists ... yes"
     else
-        echo "Error: Command '$mpidir/$mpicom' does not exist or is not executable."
+        echo "Error: Command '$mpidir/bin/$mpicom' does not exist or is not executable."
+        exit 1
+    fi
+}
+
+
+function checkUserFFTW(){
+    # check user provided fftw
+    echo "${indent}Checking user pvodided FFTW ... $fftdir"
+    if [ -d "$fftdir/include" ] && [ -f "$fftdir/include/$fftwfile" ] && [ -d "$fftdir/lib" ]; then
+        lfftdir=true
+    fi
+    if $lfftdir; then
+        echo "${indent}FFTW provided is valid ... yes"
+    else
+        echo "${indent}FFTW provided is valid ... no"
+        echo "Error: Invalid fftw directory provided."
         exit 1
     fi
 }
@@ -113,52 +131,50 @@ function fixMPIdir(){
 }
 
 
-function findFFTW(){
-    # find fftw installation
-    lfftdir=false
-    for fftdir in $fftdirs; do
-        if [ -f "$fftdir/$fftwfile" ]; then
+function locateFFTW(){
+    # check user provided fftw
+    for fftdir in $(dirname $(locate fftw | grep include | grep "$fftwfile")); do 
+        fftdir=$(realpath $fftdir | rev | sed -e 's/edulcni\///' | rev)
+        if [ -d "$fftdir/lib" ]; then
             lfftdir=true
             break
         fi
     done
     if $lfftdir; then
-        echo "${indent}FFTW lib found ... $fftdir"
+        echo "${indent}FFTW found ... $fftdir"
     else
-        printf "Error: FFTW lib not found. \n\
-        Please install or specify with option '-f' its location with\n"
-        exit 1
+        echo "${indent}FFTW not found or version is not supported."
     fi
 }
 
 
 function createMakeInc(){
     # create make.inc
-    cat > make.inc << EOF
+    make_inc="make.inc"
+    cat > $make_inc << EOF
 # Auto-generated make.inc file from configure
 
-mpidir = $mpidir
-mpicom = $mpicom
+FC = ${mpidir}/bin/${mpicom}
 
-FC = \$(mpidir)/bin/\$(mpicom)
-
-flags_mpi = \\
+flags = \\
     -pthread \\
     -fopenmp \\
-    -I\$(mpidir)/include \\
-    -L\$(mpidir)/lib
-
-flags_fft = \\
     -lfftw3 \\
-    -I/usr/local/include \\
-    -L/usr/local/lib
-
-flags = \$(flags_mpi) \$(flags_fft)
-
+    -I${mpidir}/include \\
+    -L${mpidir}/lib \\
 EOF
+    if [ "$fftdir" != "$mpidir" ]; then
+        echo "${indent}-I${fftdir}/include \\" >> $make_inc
+        echo "${indent}-L${fftdir}/lib \\" >> $make_inc
+    fi
+    echo >> $make_inc
 }
 
 ############################### program ###############################
+
+if [ "$PWD" != "$scriptdir" ]; then
+    cd $scriptdir
+fi
 
 checkArguments $@
 echo "Configuration to be written in 'make.inc'"
@@ -169,8 +185,11 @@ if $lempty ; then
 else
     echo "${indent}Collecting variables for creating make.inc"
     findMPI
-    fixMPIdir
-    findFFTW
+    if [ ! -z $fftdir ]; then
+        checkUserFFTW
+    else
+        locateFFTW
+    fi
 fi
 createMakeInc
 echo "Done! :)"

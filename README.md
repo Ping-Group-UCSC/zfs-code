@@ -3,7 +3,9 @@ Zero Field Splitting Code
 
 Description
 ------------------------------------
-This code calculates the ZFS parameter as in the article: [M. J. Rayson and P. R. Briddon, *Physical Review B* **77**, 035119 (2008).](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.77.035119 "First principles method for the calculation of zero-field splitting tensors in periodic systems").
+This code calculates the ZFS parameter as in the article:
+
+[M. J. Rayson and P. R. Briddon, *Physical Review B* **77**, 035119 (2008).](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.77.035119 "First principles method for the calculation of zero-field splitting tensors in periodic systems")
 
 Prerequisites:
 ------------------------------------

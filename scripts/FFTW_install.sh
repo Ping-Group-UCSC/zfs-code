@@ -77,7 +77,7 @@ function checkArguments(){
 
 
 function checkUserFFTW(){
-    # locate fftw installation
+    # check user provided fftw
     echo "${indent}Checking user pvodided FFTW ... $fftdir"
     if [ -d "$fftdir/include" ] && [ -f "$fftdir/include/$fftwfile" ] && [ -d "$fftdir/lib" ]; then
         lfftdir=true
@@ -93,7 +93,7 @@ function checkUserFFTW(){
 
 
 function locateFFTW(){
-    # check user provided fftw
+    # locate fftw installation
     for fftdir in $(dirname $(locate fftw | grep include | grep "$fftwfile")); do 
         fftdir=$(realpath $fftdir | rev | sed -e 's/edulcni\///' | rev)
         if [ -d "$fftdir/lib" ]; then

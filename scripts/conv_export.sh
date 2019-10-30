@@ -31,10 +31,10 @@ indent2=$(echo "$indent$indent")
 function checkArguments(){
     # handles command line arguments
     if [ -z "$1" ]; then
-        echo $noInputMessage
+        printf "$noInputMessage\n"
         exit 1
     elif [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
-        echo $helpMessage
+        printf "$helpMessage\n"
         exit 0
     fi
 
@@ -99,7 +99,7 @@ EOF
     fi
     echo "    $t2b_command -i txt_2_bin.in > txt_2_bin.out" 
     # $t2b_command -i txt_2_bin.in > txt_2_bin.out
-    if ! $t2b_command -i txt_2_bin.in > txt_2_bin.out 2> txt_2_bin.out.err ; then
+    if ! $t2b_command -i txt_2_bin.in > txt_2_bin.out 2> txt_2_bin.err ; then
         echo "Error: txt_2_bin.x raised error"
         exit 1
     fi
@@ -134,7 +134,7 @@ EOF
         exit 1
     fi
     echo "    $pwe_command < pw_export.in > pw_export.out" 
-    if ! pw_export.x < pw_export.in > pw_export.out 2> pw_export.out.err ; then
+    if ! pw_export.x < pw_export.in > pw_export.out 2> pw_export.err ; then
         echo "Error: pw_export.x raised error"
         exit 1
     fi
@@ -167,10 +167,10 @@ function conv_qe_to_txt() {
     dir="Converted_Export"
     if [ ! -d "$dir" ]; then
         mkdir $dir
-    else
-        # skip this step instead? TODO
-        echo "Error: '$dir' already exists please delete or rename it"
-        exit 1
+    # else
+    #     # skip this step instead? TODO -- ignoring it for now
+    #     echo "Error: '$dir' already exists please delete or rename it"
+    #     exit 1
     fi
     echo "    Output to be rewritten to text files under directory '$dir'"
 
@@ -185,18 +185,18 @@ function conv_qe_to_txt() {
     nbnd1=`grep "nbnd=" $w1file | awk '{print $3}' | awk -F '"' '{print $2}'`
     echo "    Working on spin up wfc  $nbnd1"
     for i in $(seq $nbnd1); do 
-        search="<Wfc.${i}"
+        search="<Wfc.${i} "
         outfile="$dir/wfc1_${i}.txt"
-        grep -A $npw $search $w1file | tail -n $npw > $outfile
+        grep -A $npw "$search" $w1file | tail -n $npw > $outfile
         # echo "      $outfile written    $i/$nbnd1"
     done
 
     nbnd2=`grep "nbnd=" $w2file | awk '{print $3}' | awk -F '"' '{print $2}'`
     echo "    Working on spin down wfc  $nbnd2"
     for i in $(seq $nbnd2); do 
-        search="<Wfc.${i}"
+        search="<Wfc.${i} "
         outfile="$dir/wfc2_${i}.txt"
-        grep -A $npw $search $w2file | tail -n $npw > $outfile
+        grep -A $npw "$search" $w2file | tail -n $npw > $outfile
         # echo "      $outfile written    $i/$nbnd1"
     done
     

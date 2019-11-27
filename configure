@@ -133,7 +133,7 @@ function fixMPIdir(){
 
 function locateFFTW(){
     # check user provided fftw
-    for fftdir in $(dirname $(locate fftw | grep include | grep "$fftwfile")); do 
+    for fftdir in $(for d in $(locate fftw | grep include | grep "$fftwfile"); do dirname $d; done); do 
         fftdir=$(realpath $fftdir | rev | sed -e 's/edulcni\///' | rev)
         if [ -d "$fftdir/lib" ]; then
             lfftdir=true

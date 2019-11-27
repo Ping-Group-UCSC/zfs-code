@@ -202,7 +202,7 @@ function conv_qe_to_txt() {
     
     echo "    Reformatting text files ..."
     for f in $dir/wfc*.txt; do
-        sed -i -e 's/^/(/' -e 's/$/)/' $f
+        perl -i -pe's/^/(/;s/$/)/' $f
     done
 
 }

@@ -49,13 +49,10 @@ contains
             ! convert integer to double
             prod_Gab = dble(Grid(i,3)*Grid(i,3))
             mag_G = dble(Grid(i,1)**2 + Grid(i,2)**2 + Grid(i,3)**2)
-            ! special treatment for G = (0,0,0)
+            ! skip G = (0,0,0)
             if (mag_G .ne. 0) then
                 ! (G_a*G_b/G^2 - delta_ab/3 -- here assume a = b = z)
                 sum_value = sum_value + rho_G(i) * ( prod_Gab /mag_G - 1.0/3.0 )
-            else
-                ! replace G_a*G_b/G^2 -> 1 for G = 0
-                sum_value = sum_value + rho_G(i) * ( 1.0 - 1.0/3.0 )
             end if
         end do
         I_zz = sum_value

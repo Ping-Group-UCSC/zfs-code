@@ -10,7 +10,10 @@ module main_mpi
 
 contains
 
-    subroutine mpi_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz)
+    ! subroutine mpi_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz)
+!!!!!!!!!! new
+    subroutine mpi_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_ab)
+!!!!!!!!!! endnew
     ! evaluates inner routine looping over loop_array values
     ! returns I_zz_out -- a portion of the I_zz value
     
@@ -36,6 +39,11 @@ contains
 
         ! return variables
         complex(dp), intent(out)                        :: I_zz
+
+!!!!!!!!!! new
+        real(dp), dimension(3,3)                        :: myI_ab
+        real(dp), dimension(3,3), intent(out)           :: I_ab
+!!!!!!!!!! endnew
 
         call mpi_get_var(nproc, myrank, is_root)
 
@@ -72,17 +80,22 @@ contains
         ! call printIntegerArray( myloop_array, myloop_size, 3, myloop_size )
 
         ! compute inner routine
-        call inner_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, myloop_size, myloop_array, myI_zz)
+        ! call inner_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, myloop_size, myloop_array, myI_zz)
+!!!!!!!!!! new
+        call inner_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, myloop_size, myloop_array, myI_ab)
+!!!!!!!!!! new
 
-
-        ! ! report myI_zz
-        ! print *, "My rank is ", myrank, " myI_zz is ", myI_zz
-
+!!!!!!!!!! new
+        ! report myI_ab
+        print *, "My rank is ", myrank, " myI_ab is ", myI_ab
+!!!!!!!!!! endnew
 
 
         ! collect and sum myI_zz into final I_zz
-        call MPI_REDUCE(myI_zz, I_zz, 1, MPI_DOUBLE_COMPLEX, MPI_SUM, root_rank, MPI_COMM_WORLD, ierr)
-
+        ! call MPI_REDUCE(myI_zz, I_zz, 1, MPI_DOUBLE_COMPLEX, MPI_SUM, root_rank, MPI_COMM_WORLD, ierr)
+!!!!!!!!!! new
+        I_ab = myI_ab
+!!!!!!!!!! endnew
 
         
     

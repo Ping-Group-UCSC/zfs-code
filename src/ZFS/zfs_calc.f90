@@ -60,6 +60,47 @@ contains
 
     end subroutine calc_I_zz
 
+!!!!!!!!!!!!!!!! new
+    subroutine calc_I_ab(npw, dim_G, grid, rho_G, I_ab_part)
+    ! calculate full I_ab matrix
+    ! I_ab = \sum_G rho(G,-G) * (G_a G_b/G^2 - delta_ab/3)
+    ! note G_ab = G_a G_b/G^2  and  d3_ab = delta_ab/3
+
+        ! input variables
+        integer, intent(in) :: npw, dim_G
+        integer, dimension(npw, dim_G), intent(in) :: grid
+        complex(dp), dimension(npw), intent(in) :: rho_G
+        ! output variables
+        real(dp), dimension(dim_G, dim_G) intent(out) :: I_ab_part
+        ! internal variables
+        real(dp), dimension(dim_G, dim_G) :: G_ab, d3_ab
+        integer :: i, j ! dummy index
+
+        ! initialize delta_ab / 3
+        ! ! Alternate way of initializing
+        ! ! data d3_ab / 1.0_dp, 0.0_dp, 0.0_dp, 0.0_dp, 1.0_dp, 0.0_dp, 0.0_dp, 0.0_dp, 1.0_dp /
+        ! ! d3_ab = d3_ab / 3.0_dp
+        d3_ab = 0.0_dp
+        do j = 1, dim_G
+            d3_ab(j, j) = 1.0_dp / 3.0_dp
+        end do
+
+        I_ab_part = 0.0_dp
+        ! skip G = 0, corresponding to i = 1
+        do i = 2, npw
+            ! calculate G_ab
+            do j = 1, dim_G
+                G_ab(j,:) = dble( grid(i,j) * grid(i,:) )
+            end do
+            G_ab = G_ab / dble(grid(i,1)**2 + grid(i,2)**2 + grid(i,3)**2)
+            ! calculate and sum I_ab_part
+            I_ab_part = I_ab_part + rho_G(i) * ( G_ab - d3_ab )
+        end do
+
+    end subroutine calc_I_ab
+!!!!!!!!!!!!!!!! endnew
+
+
     subroutine calc_ZFS(alat,I_zz,D_en,D_fr1, D_fr2)
     ! calculate final ZFS parameter
     ! all constants are in SI ; except for h which is eV*s to convert from energy to freq

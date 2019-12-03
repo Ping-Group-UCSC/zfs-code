@@ -4,7 +4,7 @@ module main_inner
     use loop_var,          only : file_w_name
     use readmod,           only : read_wfc
     use fg_calc,           only : convolution, reflection, fftw_convolution
-    use zfs_calc,          only : calc_rho, calc_I_zz
+    use zfs_calc,          only : calc_rho, calc_I_zz, calc_I_ab !!!!!!!! new
     use mpi_var,           only : mpi_get_var
     use convtime,          only : convtime_sub
     use writemod,          only : write_grid, write_wfc, write_over_grid
@@ -49,6 +49,10 @@ contains
         ! return variables
         complex(dp), intent(out)                        :: I_zz_out
 
+!!!!!!!!!! new
+        real(dp), dimension(3,3)                        :: I_ab_part
+        real(dp), dimension(3,3), intent(out)           :: I_ab_out
+!!!!!!!!!! endnew
 
         ! get mpi variables
         call mpi_get_var(nproc, myrank, is_root)
@@ -62,6 +66,9 @@ contains
 
         ! begin loop
         I_zz_out = 0
+!!!!!!!!!! new
+        I_ab_out = 0
+!!!!!!!!!! endnew
         do i_dumb = 1, loop_size
 
         !< Define file_w1 and file_w2 names >!
@@ -107,15 +114,28 @@ contains
         !< Calculate matrix element I_zz >!
             call calc_I_zz(npw,dim_G,grid,rho_G,I_zz_part)
             
+!!!!!!!!!! new
+        !< Calculate matrix I_ab >!
+            call calc_I_ab(npw, dim_G, grid, rho_G, I_ab_part)
+!!!!!!!!!! endnew
+            
             ! done with rho_G
             deallocate (rho_G)
         
+        ! !< Sum I_zz part within loop >!
+        !     if (loop_array(i_dumb,1) == 2) then
+        !         I_zz_out = I_zz_out - I_zz_part
+        !     else ! ((loop_array(i_dumb,1) == 1) .or. (loop_array(i_dumb,1) == 3))
+        !         I_zz_out = I_zz_out + I_zz_part
+        !     end if
+!!!!!!!!!! new
         !< Sum I_zz part within loop >!
             if (loop_array(i_dumb,1) == 2) then
-                I_zz_out = I_zz_out - I_zz_part
+                I_ab_out = I_ab_out - I_ab_part
             else ! ((loop_array(i_dumb,1) == 1) .or. (loop_array(i_dumb,1) == 3))
-                I_zz_out = I_zz_out + I_zz_part
+                I_ab_out = I_ab_out + I_ab_part
             end if
+!!!!!!!!!! endnew
         
 
         !< timing lines >!

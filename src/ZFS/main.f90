@@ -47,6 +47,10 @@ program main
     complex(dp), allocatable    :: f1_G(:), f2_G(:), f2_minusG (:), f3_G(:), rho_G(:)   ! dim (npw) defined over grid
     ! I_zz parameter
     complex(dp)                 :: I_zz
+!!!!!!!!!! new
+    real(dp), dimension(3,3)    :: I_ab
+    integer                     :: idumb
+!!!!!!!!!! endnew
     ! other
     character(len=4)            :: indent="    "
     character(len=64)           :: prog="ZFS"
@@ -54,6 +58,9 @@ program main
 !< output variables >!
     ! ZFS parameters in eV, GHz, and cm-1
     real(dp)                    :: D_en, D_fr1, D_fr2
+!!!!!!!!!! new
+    real(dp), dimension(3,3)    :: D_ab
+!!!!!!!!!! endnew
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -107,14 +114,22 @@ program main
         print *, indent, "computing I_zz"
     end if
 
-    call mpi_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz)
-    
+    ! call mpi_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz)
+!!!!!!!!!! new
+    call mpi_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_ab)
+!!!!!!!!!! endnew
 
 
 !< End of loop section print final I_zz >!
     if ( is_root ) then
         print *, "================================"
-        print "(a14,e13.6e2)", "Final I_zz = ", real(I_zz)
+        ! print "(a14,e13.6e2)", "Final I_zz = ", real(I_zz)
+!!!!!!!!!! new
+        print "(a14,e13.6e2)", "Final I_ab = ", 
+        do idumb = 1,3
+            print *, indent, I_ab(i,:)
+        end do
+!!!!!!!!!! endnew
     end if
 
 

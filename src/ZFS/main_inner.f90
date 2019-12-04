@@ -4,7 +4,10 @@ module main_inner
     use loop_var,          only : file_w_name
     use readmod,           only : read_wfc
     use fg_calc,           only : convolution, reflection, fftw_convolution
-    use zfs_calc,          only : calc_rho, calc_I_zz, calc_I_ab !!!!!!!! new
+    ! use zfs_calc,          only : calc_rho, calc_I_zz
+!!!!!!!! new
+    use zfs_calc,          only : calc_rho, calc_I_ab
+!!!!!!!! endnew
     use mpi_var,           only : mpi_get_var
     use convtime,          only : convtime_sub
     use writemod,          only : write_grid, write_wfc, write_over_grid
@@ -17,7 +20,10 @@ contains
     ! To-Do can pass in min and max to do making this easy to insert in mpi loop
     ! currently 1, tot_to_do is assumed (serial)
 
-    subroutine inner_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz_out)
+    ! subroutine inner_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz_out
+!!!!!!!! new
+    subroutine inner_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_ab_out)
+!!!!!!!! endnew
     ! evaluates inner routine looping over loop_array values
     ! returns I_zz_out -- a portion of the I_zz value
     
@@ -34,7 +40,7 @@ contains
         integer                                         :: i_dumb
         complex(dp), allocatable                        :: wfc1(:), wfc2(:)
         complex(dp), allocatable                        :: f1_G(:), f2_G(:), f2_minusG (:), f3_G(:), rho_G(:)
-        complex(dp)                                     :: I_zz_part
+        ! complex(dp)                                     :: I_zz_part
 
         ! mpi variables
         integer                                         :: nproc, myrank
@@ -47,8 +53,7 @@ contains
         character(len=12) :: formatted_time !! output of conver_time
 
         ! return variables
-        complex(dp), intent(out)                        :: I_zz_out
-
+        ! complex(dp), intent(out)                        :: I_zz_out
 !!!!!!!!!! new
         real(dp), dimension(3,3)                        :: I_ab_part
         real(dp), dimension(3,3), intent(out)           :: I_ab_out
@@ -65,9 +70,9 @@ contains
 
 
         ! begin loop
-        I_zz_out = 0
+        ! I_zz_out = 0
 !!!!!!!!!! new
-        I_ab_out = 0
+        I_ab_out = 0.0_dp
 !!!!!!!!!! endnew
         do i_dumb = 1, loop_size
 
@@ -106,14 +111,13 @@ contains
 
         !< Calculate ρ(G,-G) >!
             allocate (rho_G(npw))
-            call calc_rho(npw,f1_G,f2_minusG,f3_G,rho_G)
+            call calc_rho(npw, f1_G, f2_minusG, f3_G, rho_G)
 
             ! done with f(G) functions
             deallocate (f1_G, f2_minusG, f3_G)
 
-        !< Calculate matrix element I_zz >!
-            call calc_I_zz(npw,dim_G,grid,rho_G,I_zz_part)
-            
+        ! !< Calculate matrix element I_zz >!
+        !     call calc_I_zz(npw,dim_G,grid,rho_G,I_zz_part)
 !!!!!!!!!! new
         !< Calculate matrix I_ab >!
             call calc_I_ab(npw, dim_G, grid, rho_G, I_ab_part)

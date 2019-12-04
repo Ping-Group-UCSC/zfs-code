@@ -46,7 +46,7 @@ program main
     complex(dp), allocatable    :: wfc1(:), wfc2(:)                                     ! dim (npw) defined over grid
     complex(dp), allocatable    :: f1_G(:), f2_G(:), f2_minusG (:), f3_G(:), rho_G(:)   ! dim (npw) defined over grid
     ! I_zz parameter
-    complex(dp)                 :: I_zz
+    ! complex(dp)                 :: I_zz
 !!!!!!!!!! new
     real(dp), dimension(3,3)    :: I_ab
     integer                     :: idumb
@@ -57,9 +57,9 @@ program main
 
 !< output variables >!
     ! ZFS parameters in eV, GHz, and cm-1
-    real(dp)                    :: D_en, D_fr1, D_fr2
+    ! real(dp)                    :: D_en, D_fr1, D_fr2
 !!!!!!!!!! new
-    real(dp), dimension(3,3)    :: D_ab
+    real(dp), dimension(3,3)    :: D_en, D_fr1, D_fr2
 !!!!!!!!!! endnew
 
 
@@ -125,9 +125,9 @@ program main
         print *, "================================"
         ! print "(a14,e13.6e2)", "Final I_zz = ", real(I_zz)
 !!!!!!!!!! new
-        print "(a14,e13.6e2)", "Final I_ab = ", 
+        print *, "Final I_ab = "
         do idumb = 1,3
-            print *, indent, I_ab(i,:)
+            print *, indent, I_ab(idumb,:)
         end do
 !!!!!!!!!! endnew
     end if
@@ -135,10 +135,22 @@ program main
 
 !< Calculate ZFS >!
     if ( is_root ) then
-        call calc_ZFS(alat,I_zz,D_en,D_fr1,D_fr2)
+        ! call calc_ZFS(alat,I_zz,D_en,D_fr1,D_fr2)
+!!!!!!!!!! new
+        call calc_ZFS(alat, I_ab, D_en, D_fr1, D_fr2)
+!!!!!!!!!! endnew
         print *
         print *, "================================"
-        print "(a9,f10.6,a7,f10.6,a5)", "! ZFS = ", D_fr1, " GHz = ", D_fr2, " cm-1"
+        ! print "(a9,f10.6,a7,f10.6,a5)", "! ZFS = ", D_fr1, " GHz = ", D_fr2, " cm-1"
+!!!!!!!!!! new
+        print *, "Final ZFS (GHz) = "
+        do idumb = 1,3
+            print *, indent, D_fr1(idumb,:)
+        end do
+        ! do, idumb = 1,3
+        !     write(*,"100g15.5") ( D_fr1(i,j), j=1,3 )
+        ! enddo
+!!!!!!!!!! endnew
     end if
 
 

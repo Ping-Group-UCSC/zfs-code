@@ -38,11 +38,11 @@ contains
         complex(dp)                                     :: myI_zz, yourI_zz
 
         ! return variables
-        complex(dp), intent(out)                        :: I_zz
-
+        ! complex(dp), intent(out)                        :: I_zz
 !!!!!!!!!! new
         real(dp), dimension(3,3)                        :: myI_ab
         real(dp), dimension(3,3), intent(out)           :: I_ab
+        real(dp), dimension(9)           :: test
 !!!!!!!!!! endnew
 
         call mpi_get_var(nproc, myrank, is_root)
@@ -87,14 +87,13 @@ contains
 
 !!!!!!!!!! new
         ! report myI_ab
-        print *, "My rank is ", myrank, " myI_ab is ", myI_ab
+        ! print *, "My rank is ", myrank, " myI_ab is ", myI_ab
 !!!!!!!!!! endnew
 
 
-        ! collect and sum myI_zz into final I_zz
-        ! call MPI_REDUCE(myI_zz, I_zz, 1, MPI_DOUBLE_COMPLEX, MPI_SUM, root_rank, MPI_COMM_WORLD, ierr)
+        ! collect and sum myI_ab into final I_ab
 !!!!!!!!!! new
-        I_ab = myI_ab
+        call MPI_REDUCE(myI_ab, I_ab, 9, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
 !!!!!!!!!! endnew
 
         

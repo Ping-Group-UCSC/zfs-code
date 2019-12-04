@@ -45,15 +45,12 @@ contains
         integer :: i ! dummy index
 
         sum_value = (0,0)
-        do i =1, num_row
+        ! skip G = (0,0,0)
+        do i =2, num_row
             ! convert integer to double
             prod_Gab = dble(Grid(i,3)*Grid(i,3))
             mag_G = dble(Grid(i,1)**2 + Grid(i,2)**2 + Grid(i,3)**2)
-            ! skip G = (0,0,0)
-            if (mag_G .ne. 0) then
-                ! (G_a*G_b/G^2 - delta_ab/3 -- here assume a = b = z)
-                sum_value = sum_value + rho_G(i) * ( prod_Gab /mag_G - 1.0/3.0 )
-            end if
+            sum_value = sum_value + rho_G(i) * ( prod_Gab /mag_G - 1.0_dp/3.0_dp )
         end do
         I_zz = sum_value
         

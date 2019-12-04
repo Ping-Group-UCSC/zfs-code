@@ -38,11 +38,7 @@ contains
         complex(dp), intent(out)                        :: I_zz
 
         call mpi_get_var(nproc, myrank, is_root)
-
-        if ( is_root ) then
-            root_rank = myrank
-        end if
-
+        root_rank = 0
 
         ! calculate lowest loop size (integer division) and remainder
         myloop_size = loop_size / nproc

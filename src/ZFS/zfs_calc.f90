@@ -132,7 +132,7 @@ contains
             real(dp), intent(in)                        :: alat
             real(dp), dimension(3,3), intent(in)        :: I_ab
             real(dp), dimension(3,3), intent(out)       :: D_en, D_fr1, D_fr2
-            real(dp) :: omega, ang_to_m, mu_B, mu_0, ge, joules_to_ev, planck_constant, speed_of_light ! internal parameters
+            real(dp) :: omega, ang_to_m, mu_B, mu_0, ge, joules_to_ev, planck_constant, speed_of_light
     
             ang_to_m = 1.0D-10                    ! angstrom to meters
             omega = (alat*ang_to_m)**3            ! units of omega is m^3
@@ -144,7 +144,7 @@ contains
             speed_of_light = 2.99792458D8         ! speed of light : m/s
     
             D_en  = mu_B**2 * ge**2 * mu_0 / omega * joules_to_ev * 1.5D0 * I_ab        ! units of eV
-            D_fr1 = D_en / planck_constant / 1.0D9                                      ! units of GHz !!!!! TYPO !!!!!! 10.0D9 , should be 1.0D9
+            D_fr1 = D_en / planck_constant / 1.0D9                                      ! units of GHz
             D_fr2 = D_en / planck_constant / speed_of_light / 1.0D2                     ! units of cm-1
     
     

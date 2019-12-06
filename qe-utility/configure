@@ -1,0 +1,165 @@
+#!/usr/bin/env bash
+
+
+############################## variables ##############################
+
+description="Description: This script auto-generates a make.inc file for make compilation\n"
+usage="Usage: ./configure [-h, --help] || [options]\n"
+options="Options: \n\
+    [-h, --help]            print help menu\n\
+    [-q, --qedir] qedir     path to compiled qe directory\n\
+    [-e, --empty]           create make.inc without specifying a qe directory (need to add one manually)\n"
+indent="    "
+
+############################## funcitons ##############################
+
+function die(){
+    # print error and exit with status 1
+    printf "Error: $1\n" >&2
+    exit 1
+}
+
+
+function checkArguments(){
+    # handles command line arguments
+    lempty=false
+    while [ ! -z "$1" ]; do
+        if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+            printf "$description\n$usage\n$options"
+            exit 0
+        elif [ "$1" == "-q" ] || [ "$1" == "--qedir" ]; then
+            if [ -d "$2" ]; then
+                qedir=$(realpath $2)
+                shift ; shift
+            else
+                die "Directory '$2' does not exist"
+            fi
+        elif [ "$1" == "-e" ] || [ "$1" == "--empty" ]; then
+            lempty=true
+            shift
+        else
+            die "Command line option '$1' is not recognized"
+        fi
+    done
+}
+
+
+function checkQEVer(){
+    # check QE version is 6.1
+    printf "${indent}Checking user provided QE version ... "
+    local doc="$qedir/Doc/release-notes"
+    if grep -q "6.2 version" $doc ; then 
+        echo "bad"
+        die "Detected qe version is greater than 6.1, versions above 6.1 are not supported."
+    elif grep -q "6.1 version" $doc ; then 
+        echo "good"
+    else
+        echo "okay (only version 6.1 is fully supported)"
+    fi
+}
+
+
+function checkQEDir(){
+    # check user provided QE
+    # existence of dir checked already, here we check its contents
+    echo "${indent}Checking user provided QE directory ... $qedir"
+    qemake="make.inc"
+    modules="\
+    iotk/src \
+    Modules \
+    FFTXlib \
+    LAXlib \
+    PW/src \
+    "
+    objects="\
+    PW/src/libpw.a \
+    PP/src/libpp.a \
+    Modules/libqemod.a \
+    FFTXlib/libqefft.a \
+    LAXlib/libqela.a \
+    "
+    printf "${indent}${indent}make.inc ...  "
+    if [ -f $qedir/$qemake ]; then
+        echo "yes"
+    else
+        echo "no"
+        die "Missing make.inc file: '$qedir/$qemake' does not exist"
+    fi
+
+    for mod in $modules ; do
+        printf "${indent}${indent}${mod}  ...  "
+        if [ -d $qedir/$mod ]; then
+            echo "yes"
+        else
+            echo "no"
+            die "Missing ${mod} folder: '$qedir/$mod' does not exist"
+        fi
+    done
+
+    for obj in $objects ; do
+        printf "${indent}${indent}${obj}  ...  "
+        if [ -f $qedir/$obj ]; then
+            echo "yes"
+        else
+            echo "no"
+            die "Missing ${obj} file: '$qedir/$obj' does not exist"
+        fi
+    done
+}
+
+
+function createMakefile(){
+    # create make.inc
+    makefile="Makefile"
+    TAB="$(printf '\t')"
+    cat > $makefile << EOF
+# Auto-generated Makefile from configure -- interfaces QE
+
+# pw binary
+pwbin = ${qedir}
+
+# include pw make.inc
+include \$(pwbin)/make.inc
+
+# modify F90FLAGS
+F90FLAGS = \$(FFLAGS) -x f95-cpp-input \$(FDFLAGS) \$(MODFLAGS)
+
+# location of needed modules and included files (if any)
+MODFLAGS= \$(MOD_FLAG)\$(pwbin)/iotk/src \$(MOD_FLAG)\$(pwbin)/Modules \\
+        \$(MOD_FLAG)\$(pwbin)/FFTXlib \$(MOD_FLAG)\$(pwbin)/LAXlib \$(MOD_FLAG)\$(pwbin)/PW/src
+
+# location of objects
+PWOBJS = \$(pwbin)/PW/src/libpw.a
+PPOBJS = \$(pwbin)/PP/src/libpp.a
+QEOBJS = \$(pwbin)/Modules/libqemod.a \$(pwbin)/FFTXlib/libqefft.a \$(pwbin)/LAXlib/libqela.a
+MODULES = \$(PPOBJS) \$(PWOBJS) \$(QEOBJS)
+
+# rules
+all : zfs.x
+
+zfs.x : zfs.o
+${TAB}\$(LD) \$(LDFLAGS) -o \$@ zfs.o \$(MODULES) \$(LIBOBJS) \$(LIBS)
+
+clean :
+${TAB}- rm -f *.x *.o
+
+EOF
+}
+
+############################### program ###############################
+
+checkArguments $@
+echo "Configuration to be written in 'make.inc'"
+if $lempty ; then
+    echo "${indent}Creating empty 'make.inc' for manual creation"
+    qedir=""
+else
+    if [ -z $qedir ]; then die "Please specify a qe directory with -q option" ; fi
+    checkQEVer
+    checkQEDir
+fi
+echo "${indent}Generating 'make.inc'"
+createMakefile
+echo "Done! :)"
+
+

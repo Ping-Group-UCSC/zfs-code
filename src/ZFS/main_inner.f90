@@ -22,7 +22,7 @@ contains
 
     ! subroutine inner_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz_out
 !!!!!!!! new
-    subroutine inner_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_ab_out)
+    subroutine inner_routine(verbosity, direct_flag, npw, dim_G, grid, b, export_dir, loop_size, loop_array, I_ab_out)
 !!!!!!!! endnew
     ! evaluates inner routine looping over loop_array values
     ! returns I_zz_out -- a portion of the I_zz value
@@ -57,6 +57,7 @@ contains
 !!!!!!!!!! new
         real(dp), dimension(3,3)                        :: I_ab_part
         real(dp), dimension(3,3), intent(out)           :: I_ab_out
+        real(dp), dimension(3,3)                        :: b
 !!!!!!!!!! endnew
 
         ! get mpi variables
@@ -120,7 +121,7 @@ contains
         !     call calc_I_zz(npw,dim_G,grid,rho_G,I_zz_part)
 !!!!!!!!!! new
         !< Calculate matrix I_ab >!
-            call calc_I_ab(npw, dim_G, grid, rho_G, I_ab_part)
+            call calc_I_ab(npw, dim_G, grid, b, rho_G, I_ab_part)
 !!!!!!!!!! endnew
             
             ! done with rho_G

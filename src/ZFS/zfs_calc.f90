@@ -61,7 +61,7 @@ contains
     ! end subroutine calc_I_zz
 
 !!!!!!!!!!!!!!!! new
-    subroutine calc_I_ab(npw, dim_G, grid, rho_G, I_ab_part)
+    subroutine calc_I_ab(npw, dim_G, grid, b, rho_G, I_ab_part)
     ! calculate full I_ab matrix
     ! I_ab = \sum_G rho(G,-G) * (G_a G_b/G^2 - delta_ab/3)
     ! note G_ab = G_a G_b/G^2  and  d3_ab = delta_ab/3
@@ -70,9 +70,11 @@ contains
         integer, intent(in)                                 :: npw, dim_G
         integer, dimension(npw, dim_G), intent(in)          :: grid
         complex(dp), dimension(npw), intent(in)             :: rho_G
+        real(dp), dimension(3,3), intent(in)                :: b
         ! output variables
         real(dp), dimension(dim_G, dim_G), intent(out)      :: I_ab_part
         ! internal variables
+        real(dp), dimension(3)                              :: bG
         real(dp), dimension(dim_G, dim_G)                   :: G_ab, d3_ab
         integer                                             :: i, j ! dummy index
 
@@ -83,9 +85,11 @@ contains
         I_ab_part = 0.0_dp
         ! skip G = 0, corresponding to i = 1
         do i = 2, npw
+            ! calculate bG (i.e. converted from crystal coordinates to xyz)
+            bG = matmul(b, dble(grid(i,:)))
             ! calculate G_ab
-            forall (j = 1:dim_G) G_ab(j,:) = dble( grid(i,j) * grid(i,:) )
-            G_ab = G_ab / dble(grid(i,1)**2 + grid(i,2)**2 + grid(i,3)**2)
+            forall (j = 1:dim_G) G_ab(j,:) = bG(j) * bG(:)
+            G_ab = G_ab / (bG(1)**2 + bG(2)**2 + bG(3)**2)
             ! calculate and sum I_ab_part
             I_ab_part = I_ab_part + rho_G(i) * ( G_ab - d3_ab )
         end do
@@ -123,19 +127,19 @@ contains
 
 
 !!!!!!!! new
-    subroutine calc_ZFS(alat, I_ab, D_en, D_fr1, D_fr2)
+    subroutine calc_ZFS(omega, I_ab, D_en, D_fr1, D_fr2)
         ! calculate final ZFS parameter
         ! all constants are in SI ; except for h which is eV*s to convert from energy to freq
-        ! D = mu_0 * ge**2 * mu_B**2 / omega * 3/2 * I_zz
+        ! D = mu_0 * ge**2 * mu_B**2 / omega * I_ab
         ! returns real values D_en and D_fr, (units of eV and GHz)
     
-            real(dp), intent(in)                        :: alat
             real(dp), dimension(3,3), intent(in)        :: I_ab
             real(dp), dimension(3,3), intent(out)       :: D_en, D_fr1, D_fr2
-            real(dp) :: omega, ang_to_m, mu_B, mu_0, ge, joules_to_ev, planck_constant, speed_of_light
+            real(dp) :: omega, bohr_to_m, mu_B, mu_0, ge, joules_to_ev, planck_constant, speed_of_light
     
-            ang_to_m = 1.0D-10                    ! angstrom to meters
-            omega = (alat*ang_to_m)**3            ! units of omega is m^3
+            ! ang_to_m = 1.0D-10                    ! angstrom to meters
+            bohr_to_m = 5.29177D-11               ! bohr to meters
+            omega = omega * (bohr_to_m)**3        ! units of omega converted from bohr^3 to m^3
             mu_B = 9.274009994D-24                ! bohr magneton : J/T  =  m^2 A
             mu_0 = 1.2566370614D-06               ! vacuum permeability : N/A^2
             ge = 2.00231930436256D0               ! g-factor for electron : unitless
@@ -143,10 +147,9 @@ contains
             planck_constant = 4.135667662D-15     ! planck's constant : eV*s
             speed_of_light = 2.99792458D8         ! speed of light : m/s
     
-            D_en  = mu_B**2 * ge**2 * mu_0 / omega * joules_to_ev * 1.5D0 * I_ab        ! units of eV
+            D_en  = mu_B**2 * ge**2 * mu_0 / omega * joules_to_ev * I_ab                ! units of eV
             D_fr1 = D_en / planck_constant / 1.0D9                                      ! units of GHz
             D_fr2 = D_en / planck_constant / speed_of_light / 1.0D2                     ! units of cm-1
-    
     
         end subroutine calc_ZFS
 !!!!!!!! end new

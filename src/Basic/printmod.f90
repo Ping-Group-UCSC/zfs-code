@@ -62,4 +62,24 @@ contains
     end subroutine print_over_grid
 
 
+    subroutine print_cell(cell)
+
+        use params, only : dp, tcell
+
+        type(tcell), intent(in)     :: cell
+        integer                     :: i
+
+        print *, "omega = ", cell%omega
+        print *, "lattice vectors (a) = "
+        do i = 1, 3
+            print *, cell%a(i,:)
+        end do
+        print *, "reciprocal lattice vectors (b) = "
+        do i = 1, 3
+            print *, cell%b(i,:)
+        end do
+
+    end subroutine print_cell
+
+
 end module printmod

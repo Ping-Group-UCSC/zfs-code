@@ -129,6 +129,7 @@ contains
             do iband = band_min, iband_max
                 do jband = iband, jband_max
 
+                    ! if (( jband == iband ) .and. ( ispin .ne. 2 )) then
                     if ( jband == iband ) then
                         cycle
                     end if

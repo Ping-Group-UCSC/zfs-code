@@ -149,7 +149,8 @@ function check_export_dir(){
     gfile="$1/grid.1"
     w1file="$1/wfc.1"
     w2file="$1/wfc.2"
-    for I in $gfile $w1file $w2file; do
+    cellfile="$1/index.xml"
+    for I in "$gfile" "$w1file" "$w2file" "$cellfile"; do
         if [ ! -f "$I" ];then
             echo "Error: $I does not exist"
             exit 1
@@ -203,6 +204,16 @@ function conv_qe_to_txt() {
     echo "    Reformatting text files ..."
     for f in $dir/wfc*.txt; do
         perl -i -pe's/^/(/;s/$/)/' $f
+    done
+
+
+    echo "    Collecting cell ... "
+    outfile="$dir/cell.txt"
+    grep "omega=" $cellfile | awk '{print $3}' | sed -e 's/\"/ /g' | awk '{print $2}' > $outfile
+    for opt in 'a' 'b' ; do
+        for i in $(seq 1 3); do 
+            grep "<${opt}${i} " $cellfile | sed -e 's/\"/ /g' | awk '{print $3, $4, $5}' >> $outfile
+        done
     done
 
 }

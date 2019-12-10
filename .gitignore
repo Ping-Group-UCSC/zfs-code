@@ -17,3 +17,5 @@ Examples/Sine-Wave/zfs-conv.out
 Examples/Sine-Wave/Export/wfc1_*.txt
 Examples/Sine-Wave/*_r.eps
 Examples/Sine-Wave/fft-vs-con_*.eps
+# qe-utility
+qe-utility/Makefile

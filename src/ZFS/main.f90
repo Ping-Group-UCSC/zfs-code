@@ -9,13 +9,13 @@
 program main
 
 !< modules and subroutines >!
-    use params,            only : dp
+    use params,            only : dp, tcell
     use mpi_var,           only : mpi_get_var
     use intro_outro,       only : intro, outro
     use input,             only : command_input, parse_input, print_input
     use loop_var,          only : init_loop_array
-    use readmod,           only : read_length, read_grid, read_wfc
-    use printmod,          only : printIntegerArray, printComplexArray
+    use readmod,           only : read_length, read_grid, read_wfc, read_cell
+    use printmod,          only : printIntegerArray, printComplexArray, print_cell
     use main_inner,        only : inner_routine
     use main_mpi,          only : mpi_routine
     use zfs_calc,          only : calc_ZFS
@@ -40,20 +40,28 @@ program main
     integer                     :: loop_size
     ! dimensions and file names
     integer                     :: npw, dim_G = 3
-    character(len=256)          :: file_G, file_w1, file_w2
+    character(len=256)          :: file_G, file_w1, file_w2, file_cell
     ! main functions
     integer, allocatable        :: grid(:,:)                                            ! dim (npw,3)
     complex(dp), allocatable    :: wfc1(:), wfc2(:)                                     ! dim (npw) defined over grid
     complex(dp), allocatable    :: f1_G(:), f2_G(:), f2_minusG (:), f3_G(:), rho_G(:)   ! dim (npw) defined over grid
     ! I_zz parameter
-    complex(dp)                 :: I_zz
+    ! complex(dp)                 :: I_zz
+!!!!!!!!!! new
+    real(dp), dimension(3,3)    :: I_ab
+    integer                     :: idumb
+!!!!!!!!!! endnew
     ! other
     character(len=4)            :: indent="    "
     character(len=64)           :: prog="ZFS"
 
 !< output variables >!
     ! ZFS parameters in eV, GHz, and cm-1
-    real(dp)                    :: D_en, D_fr1, D_fr2
+    ! real(dp)                    :: D_en, D_fr1, D_fr2
+!!!!!!!!!! new
+    real(dp), dimension(3,3)    :: D_en, D_fr1, D_fr2
+    type(tcell)                 :: cell
+!!!!!!!!!! endnew
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -84,6 +92,11 @@ program main
     allocate (grid(npw,dim_G))
     call read_grid(file_G,npw,dim_G,grid)
 
+!< Read in cell >!
+    file_cell = trim(export_dir) // "/" // "cell.txt"
+    call read_cell(file_cell, cell)
+    if ( is_root ) call print_cell(cell)
+
 
 !< Begin Calculation >!
     if ( is_root ) then
@@ -104,26 +117,47 @@ program main
         end if
         print *
 
-        print *, indent, "computing I_zz"
+        print *, indent, "computing I_ab"
     end if
 
-    call mpi_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz)
-    
+    ! call mpi_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz)
+!!!!!!!!!! new
+    call mpi_routine(verbosity, direct_flag, npw, dim_G, grid, cell%b, export_dir, loop_size, loop_array, I_ab)
+!!!!!!!!!! endnew
 
 
-!< End of loop section print final I_zz >!
-    if ( is_root ) then
-        print *, "================================"
-        print "(a14,e13.6e2)", "Final I_zz = ", real(I_zz)
-    end if
+! !< End of loop section print final I_zz >!
+!     if ( is_root ) then
+!         print *, "================================"
+!         ! print "(a14,e13.6e2)", "Final I_zz = ", real(I_zz)
+! !!!!!!!!!! new
+!         print *, "Final I_ab = "
+!         do idumb = 1,3
+!             print *, indent, I_ab(idumb,:)
+!         end do
+! !!!!!!!!!! endnew
+!     end if
 
 
 !< Calculate ZFS >!
     if ( is_root ) then
-        call calc_ZFS(alat,I_zz,D_en,D_fr1,D_fr2)
+        ! call calc_ZFS(alat,I_zz,D_en,D_fr1,D_fr2)
+!!!!!!!!!! new
+        call calc_ZFS(cell%omega, I_ab, D_en, D_fr1, D_fr2)
+!!!!!!!!!! endnew
         print *
         print *, "================================"
-        print "(a9,f10.6,a7,f10.6,a5)", "! ZFS = ", D_fr1, " GHz = ", D_fr2, " cm-1"
+        ! print "(a9,f10.6,a7,f10.6,a5)", "! ZFS = ", D_fr1, " GHz = ", D_fr2, " cm-1"
+!!!!!!!!!! new
+        print *, "Warning: factor of 3/2 is removed in current version for clarity"
+        print *, "Final ZFS (GHz) = "
+        do idumb = 1,3
+            print *, indent, D_fr1(idumb,:)
+        end do
+        ! do, idumb = 1,3
+        !     write(*,"100g15.5") ( D_fr1(i,j), j=1,3 )
+        ! enddo
+!!!!!!!!!! endnew
     end if
 
 

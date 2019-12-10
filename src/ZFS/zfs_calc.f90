@@ -86,9 +86,10 @@ contains
         ! skip G = 0, corresponding to i = 1
         do i = 2, npw
             ! calculate bG (i.e. converted from crystal coordinates to xyz)
-            bG = matmul(b, dble(grid(i,:)))
+            bG = matmul(transpose(b), dble(grid(i,:)))
             ! calculate G_ab
             forall (j = 1:dim_G) G_ab(j,:) = bG(j) * bG(:)
+            ! print *, grid(i,:), "|", bG, "|", G_ab, "|", G_ab / (bG(1)**2 + bG(2)**2 + bG(3)**2)
             G_ab = G_ab / (bG(1)**2 + bG(2)**2 + bG(3)**2)
             ! calculate and sum I_ab_part
             I_ab_part = I_ab_part + rho_G(i) * ( G_ab - d3_ab )

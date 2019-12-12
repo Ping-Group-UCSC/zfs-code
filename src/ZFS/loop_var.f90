@@ -93,7 +93,7 @@ contains
         integer, intent(in)                 :: band_min, band_max, occ_up, occ_dn
 
         ! internal variables
-        integer                             :: ispin, iband, jband, iband_max, jband_max
+        integer                             :: ispin, iband, jband, iband_max, jband_max, jband_min
 
         ! return variables
         integer, intent(out)                :: loop_size
@@ -105,10 +105,13 @@ contains
             ! calc i_max and j_max
             call max_index(ispin, band_max, occ_up, occ_dn, iband_max, jband_max)
 
-            do iband = band_min, iband_max
-                do jband = band_min, jband_max
+            if (ispin == 2) jband_min = band_min
 
-                    if (((ispin == 1) .or. (ispin == 3)) .and. (iband == jband)) continue
+            do iband = band_min, iband_max
+                if (ispin /= 2 ) jband_min = iband + 1
+
+                do jband = jband_min, jband_max
+
                     loop_size = loop_size + 1
 
                 end do
@@ -120,12 +123,15 @@ contains
         allocate(loop_array(loop_size,3))
         loop_size = 0
         do ispin = 1, 3
-            call max_index(ispin,band_max, occ_up, occ_dn, iband_max, jband_max)
+            call max_index(ispin, band_max, occ_up, occ_dn, iband_max, jband_max)
+
+            if (ispin == 2) jband_min = band_min
 
             do iband = band_min, iband_max
-                do jband = band_min, jband_max
+                if (ispin /= 2 ) jband_min = iband + 1
 
-                    if (((ispin == 1) .or. (ispin == 3)) .and. (iband == jband)) continue
+                do jband = jband_min, jband_max
+
                     loop_array(loop_size + 1, 1) = ispin
                     loop_array(loop_size + 1, 2) = iband
                     loop_array(loop_size + 1, 3) = jband
@@ -135,6 +141,10 @@ contains
             end do
             
         end do
+
+        ! if ( loop_size /= size(loop_array(:,1))) 2
+        ! ! there is definitely something suspicious about this , 
+        ! ! need to reconsidre what I want and what I am actually computing
 
     end subroutine init_loop_array
 

@@ -148,7 +148,7 @@ contains
             planck_constant = 4.135667662D-15     ! planck's constant : eV*s
             speed_of_light = 2.99792458D8         ! speed of light : m/s
     
-            D_en  = mu_B**2 * ge**2 * mu_0 / omega * joules_to_ev * I_ab                ! units of eV
+            D_en  = mu_B**2 * ge**2 * mu_0 / omega * joules_to_ev * I_ab / 2.0_dp       ! units of eV
             D_fr1 = D_en / planck_constant / 1.0D9                                      ! units of GHz
             D_fr2 = D_en / planck_constant / speed_of_light / 1.0D2                     ! units of cm-1
     

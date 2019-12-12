@@ -102,17 +102,13 @@ contains
         ! calculate loop_size in order to allocate correct space for loop_array
         loop_size = 0
         do ispin = 1, 3
-            ! calc i_mac and j_max
+            ! calc i_max and j_max
             call max_index(ispin, band_max, occ_up, occ_dn, iband_max, jband_max)
 
             do iband = band_min, iband_max
-                do jband = iband, jband_max
+                do jband = band_min, jband_max
 
-                    ! if (( jband == iband ) .and. ( ispin .ne. 2 )) then
-                    if ( jband == iband ) then
-                        cycle
-                    end if
-
+                    if (((ispin == 1) .or. (ispin == 3)) .and. (iband == jband)) continue
                     loop_size = loop_size + 1
 
                 end do
@@ -127,13 +123,9 @@ contains
             call max_index(ispin,band_max, occ_up, occ_dn, iband_max, jband_max)
 
             do iband = band_min, iband_max
-                do jband = iband, jband_max
+                do jband = band_min, jband_max
 
-                    ! if (( jband == iband ) .and. ( ispin .ne. 2 )) then
-                    if ( jband == iband ) then
-                        cycle
-                    end if
-
+                    if (((ispin == 1) .or. (ispin == 3)) .and. (iband == jband)) continue
                     loop_array(loop_size + 1, 1) = ispin
                     loop_array(loop_size + 1, 2) = iband
                     loop_array(loop_size + 1, 3) = jband

@@ -82,4 +82,36 @@ contains
     end subroutine print_cell
 
 
+    subroutine print_real_array(array_in, num_row, num_col)
+    ! prints real array for display (e.g. D_ab)
+
+        integer, intent(in)                                 :: num_row, num_col
+        real(dp), dimension(num_row,num_col), intent(in)    :: array_in
+        integer                                             :: i ! dummy index
+
+        do i = 1, num_row
+            write(*,100) array_in(i,:)
+        end do
+        ! 100 format(8x, e13.6e2, 2x, e13.6e2, 2x, e13.6e2)
+        100 format(5x, f12.6, 2x, f12.6, 2x, f12.6)
+
+    end subroutine print_real_array
+
+
+    subroutine print_eigs(eigs, evecs, dim)
+    ! prints eigs and eigenvectors
+
+        integer, intent(in)                                 :: dim
+        real(dp), dimension(dim), intent(in)                :: eigs
+        real(dp), dimension(dim, dim), intent(in)           :: evecs
+        integer                                             :: i ! dummy index
+
+        do i = 1, dim
+            write(*,100) i, eigs(i),  evecs(:,i)
+        end do
+        100 format(5x, "Eig(", i1, ") = ", f12.6, 3x, "[", f12.6, 2x, f12.6, 2x, f12.6 ," ]")
+
+    end subroutine print_eigs
+
+
 end module printmod

@@ -15,10 +15,11 @@ program main
     use input,             only : command_input, parse_input, print_input
     use loop_var,          only : init_loop_array
     use readmod,           only : read_length, read_grid, read_wfc, read_cell
-    use printmod,          only : printIntegerArray, printComplexArray, print_cell
+    use printmod,          only : printIntegerArray, printComplexArray, print_cell, print_real_array, print_eigs
     use main_inner,        only : inner_routine
     use main_mpi,          only : mpi_routine
-    use zfs_calc,          only : calc_ZFS
+    use zfs_calc,          only : calc_D_ab, zfs_parameters
+    use linalg,            only : eigenvalues_symmetric
     use mpi
 
     implicit none
@@ -30,6 +31,9 @@ program main
     integer                     :: band_min, band_max, occ_up, occ_dn
     logical                     :: direct_flag
     character(len=16)           :: verbosity
+
+!< read in from converted_export >!
+    type(tcell)                 :: cell
 
 !< internal variables >!
     ! mpi variables
@@ -45,23 +49,16 @@ program main
     integer, allocatable        :: grid(:,:)                                            ! dim (npw,3)
     complex(dp), allocatable    :: wfc1(:), wfc2(:)                                     ! dim (npw) defined over grid
     complex(dp), allocatable    :: f1_G(:), f2_G(:), f2_minusG (:), f3_G(:), rho_G(:)   ! dim (npw) defined over grid
-    ! I_zz parameter
-    ! complex(dp)                 :: I_zz
-!!!!!!!!!! new
     real(dp), dimension(3,3)    :: I_ab
     integer                     :: idumb
-!!!!!!!!!! endnew
     ! other
     character(len=4)            :: indent="    "
     character(len=64)           :: prog="ZFS"
 
 !< output variables >!
     ! ZFS parameters in eV, GHz, and cm-1
-    ! real(dp)                    :: D_en, D_fr1, D_fr2
-!!!!!!!!!! new
-    real(dp), dimension(3,3)    :: D_en, D_fr1, D_fr2
-    type(tcell)                 :: cell
-!!!!!!!!!! endnew
+    real(dp), dimension(3,3)    :: D_en, D_fr1, D_fr2, evecs
+    real(dp), dimension(3)      :: eigs
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -95,12 +92,13 @@ program main
 !< Read in cell >!
     file_cell = trim(export_dir) // "/" // "cell.txt"
     call read_cell(file_cell, cell)
-    if ( is_root ) call print_cell(cell)
+    ! if ( is_root ) call print_cell(cell)
 
 
 !< Begin Calculation >!
     if ( is_root ) then
         print *
+        print *, "================================"
         print *, "Beginning Calculation of ZFS"
         print *
     end if
@@ -115,47 +113,30 @@ program main
         if ( loop_size .le. 20 ) call printIntegerArray(loop_array, loop_size, 3, loop_size)
         print *
 
-        print *, indent, "computing I_ab"
+        print *, indent, "computing D_ab"
     end if
 
-    ! call mpi_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz)
-!!!!!!!!!! new
     call mpi_routine(verbosity, direct_flag, npw, dim_G, grid, cell%b, export_dir, loop_size, loop_array, I_ab)
-!!!!!!!!!! endnew
-
-
-! !< End of loop section print final I_zz >!
-!     if ( is_root ) then
-!         print *, "================================"
-!         ! print "(a14,e13.6e2)", "Final I_zz = ", real(I_zz)
-! !!!!!!!!!! new
-!         print *, "Final I_ab = "
-!         do idumb = 1,3
-!             print *, indent, I_ab(idumb,:)
-!         end do
-! !!!!!!!!!! endnew
-!     end if
 
 
 !< Calculate ZFS >!
     if ( is_root ) then
-        ! call calc_ZFS(alat,I_zz,D_en,D_fr1,D_fr2)
-!!!!!!!!!! new
-        call calc_ZFS(cell%omega, I_ab, D_en, D_fr1, D_fr2)
-!!!!!!!!!! endnew
         print *
         print *, "================================"
-        ! print "(a9,f10.6,a7,f10.6,a5)", "! ZFS = ", D_fr1, " GHz = ", D_fr2, " cm-1"
-!!!!!!!!!! new
-        print *, "Warning: factor of 3/2 is removed in current version for clarity"
-        print *, "Final ZFS (GHz) = "
-        do idumb = 1,3
-            print *, indent, D_fr1(idumb,:)
-        end do
-        ! do, idumb = 1,3
-        !     write(*,"100g15.5") ( D_fr1(i,j), j=1,3 )
-        ! enddo
-!!!!!!!!!! endnew
+        print *, "D_ab (GHz) = "
+        call calc_D_ab(cell%omega, I_ab, D_en, D_fr1, D_fr2)
+        call print_real_array(D_fr1, 3, 3)
+
+        print *
+        print *, "================================"
+        print *, "Computing Eigenvalues of D_ab"
+        call eigenvalues_symmetric(D_fr1, 3, eigs, evecs)
+        call print_eigs(eigs, evecs, 3)
+
+        print *
+        print *, "================================"
+        print *, "Zero Field Splitting Parameters"
+        call zfs_parameters(eigs, evecs)
     end if
 
 

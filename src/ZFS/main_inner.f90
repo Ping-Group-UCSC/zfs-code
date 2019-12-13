@@ -17,13 +17,7 @@ module main_inner
 
 contains
 
-    ! To-Do can pass in min and max to do making this easy to insert in mpi loop
-    ! currently 1, tot_to_do is assumed (serial)
-
-    ! subroutine inner_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz_out
-!!!!!!!! new
     subroutine inner_routine(verbosity, direct_flag, npw, dim_G, grid, b, export_dir, loop_size, loop_array, I_ab_out)
-!!!!!!!! endnew
     ! evaluates inner routine looping over loop_array values
     ! returns I_zz_out -- a portion of the I_zz value
     
@@ -40,25 +34,20 @@ contains
         integer                                         :: i_dumb
         complex(dp), allocatable                        :: wfc1(:), wfc2(:)
         complex(dp), allocatable                        :: f1_G(:), f2_G(:), f2_minusG (:), f3_G(:), rho_G(:)
-        ! complex(dp)                                     :: I_zz_part
+        real(dp), dimension(3,3)                        :: I_ab_part, b
 
         ! mpi variables
         integer                                         :: nproc, myrank
         logical                                         :: is_root
 
         ! values for timing
-        real :: start, current   ! internal values for printing timing
-        real :: step, percent          ! i/num_row
+        real :: start, current
+        real :: step, percent
         integer :: check, increment
-        character(len=12) :: formatted_time !! output of conver_time
+        character(len=12) :: formatted_time
 
         ! return variables
-        ! complex(dp), intent(out)                        :: I_zz_out
-!!!!!!!!!! new
-        real(dp), dimension(3,3)                        :: I_ab_part
         real(dp), dimension(3,3), intent(out)           :: I_ab_out
-        real(dp), dimension(3,3)                        :: b
-!!!!!!!!!! endnew
 
         ! get mpi variables
         call mpi_get_var(nproc, myrank, is_root)
@@ -71,10 +60,7 @@ contains
 
 
         ! begin loop
-        ! I_zz_out = 0
-!!!!!!!!!! new
         I_ab_out = 0.0_dp
-!!!!!!!!!! endnew
         do i_dumb = 1, loop_size
 
         !< Define file_w1 and file_w2 names >!
@@ -117,30 +103,18 @@ contains
             ! done with f(G) functions
             deallocate (f1_G, f2_minusG, f3_G)
 
-        ! !< Calculate matrix element I_zz >!
-        !     call calc_I_zz(npw,dim_G,grid,rho_G,I_zz_part)
-!!!!!!!!!! new
         !< Calculate matrix I_ab >!
             call calc_I_ab(npw, dim_G, grid, b, rho_G, I_ab_part)
-!!!!!!!!!! endnew
             
             ! done with rho_G
             deallocate (rho_G)
         
-        ! !< Sum I_zz part within loop >!
-        !     if (loop_array(i_dumb,1) == 2) then
-        !         I_zz_out = I_zz_out - I_zz_part
-        !     else ! ((loop_array(i_dumb,1) == 1) .or. (loop_array(i_dumb,1) == 3))
-        !         I_zz_out = I_zz_out + I_zz_part
-        !     end if
-!!!!!!!!!! new
-        !< Sum I_zz part within loop >!
+        !< Sum I_ab part within loop >!
             if (loop_array(i_dumb,1) == 2) then
                 I_ab_out = I_ab_out - I_ab_part
             else ! ((loop_array(i_dumb,1) == 1) .or. (loop_array(i_dumb,1) == 3))
                 I_ab_out = I_ab_out + I_ab_part
             end if
-!!!!!!!!!! endnew
         
 
         !< timing lines >!
@@ -149,7 +123,7 @@ contains
                     percent = real(i_dumb)/real(loop_size)
                     call cpu_time(current)
                     call convtime_sub(current, formatted_time)
-                    print "(a15,f4.2,a13,a12)", "     Progress: ",percent,"   cpu_time: ", formatted_time
+                    print "(9x, a10, f4.2, 4x, a13, a12)", "progress: ", percent, "cpu_time: ", formatted_time
                     check = check + increment
                 end if
             end if

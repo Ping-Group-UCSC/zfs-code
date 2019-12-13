@@ -160,6 +160,7 @@ flags = \\
     -pthread \\
     -fopenmp \\
     -lfftw3 \\
+    -llapack \\
     -I${mpidir}/include \\
     -L${mpidir}/lib \\
 EOF

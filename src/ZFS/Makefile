@@ -6,6 +6,7 @@ zfs_objects = \
 	input.o \
 	fftwmod.o \
 	fg_calc.o \
+	linalg.o \
 	loop_var.o \
 	mpi_var.o \
     main_inner.o \
@@ -32,6 +33,9 @@ fftwmod.o: fftwmod.f90
 
 fg_calc.o: fg_calc.f90
 	$(FC) -c fg_calc.f90 $(flags) $(flags_zfs)
+
+linalg.o: linalg.f90
+	$(FC) -c linalg.f90 $(flags) $(flags_zfs)
 
 loop_var.o: loop_var.f90
 	$(FC) -c loop_var.f90 $(flags) $(flags_zfs)

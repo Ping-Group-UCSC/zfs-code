@@ -93,7 +93,7 @@ contains
         integer, intent(in)                 :: band_min, band_max, occ_up, occ_dn
 
         ! internal variables
-        integer                             :: ispin, iband, jband, iband_max, jband_max
+        integer                             :: ispin, iband, jband, iband_max, jband_max, jband_min
 
         ! return variables
         integer, intent(out)                :: loop_size
@@ -102,16 +102,15 @@ contains
         ! calculate loop_size in order to allocate correct space for loop_array
         loop_size = 0
         do ispin = 1, 3
-            ! calc i_mac and j_max
+            ! calc i_max and j_max
             call max_index(ispin, band_max, occ_up, occ_dn, iband_max, jband_max)
 
-            do iband = band_min, iband_max
-                do jband = iband, jband_max
+            if (ispin == 2) jband_min = band_min
 
-                    ! if (( jband == iband ) .and. ( ispin .ne. 2 )) then
-                    if ( jband == iband ) then
-                        cycle
-                    end if
+            do iband = band_min, iband_max
+                if (ispin /= 2 ) jband_min = iband + 1
+
+                do jband = jband_min, jband_max
 
                     loop_size = loop_size + 1
 
@@ -124,15 +123,14 @@ contains
         allocate(loop_array(loop_size,3))
         loop_size = 0
         do ispin = 1, 3
-            call max_index(ispin,band_max, occ_up, occ_dn, iband_max, jband_max)
+            call max_index(ispin, band_max, occ_up, occ_dn, iband_max, jband_max)
+
+            if (ispin == 2) jband_min = band_min
 
             do iband = band_min, iband_max
-                do jband = iband, jband_max
+                if (ispin /= 2 ) jband_min = iband + 1
 
-                    ! if (( jband == iband ) .and. ( ispin .ne. 2 )) then
-                    if ( jband == iband ) then
-                        cycle
-                    end if
+                do jband = jband_min, jband_max
 
                     loop_array(loop_size + 1, 1) = ispin
                     loop_array(loop_size + 1, 2) = iband
@@ -143,6 +141,10 @@ contains
             end do
             
         end do
+
+        ! if ( loop_size /= size(loop_array(:,1))) 2
+        ! ! there is definitely something suspicious about this , 
+        ! ! need to reconsidre what I want and what I am actually computing
 
     end subroutine init_loop_array
 

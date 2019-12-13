@@ -112,9 +112,7 @@ program main
 
     if ( is_root ) then
         print "(a5,a29,i9)", indent, "number of steps to compute = ", loop_size
-        if ( loop_size .le. 20 ) then
-            call printIntegerArray(loop_array,loop_size,3,loop_size)
-        end if
+        if ( loop_size .le. 20 ) call printIntegerArray(loop_array, loop_size, 3, loop_size)
         print *
 
         print *, indent, "computing I_ab"

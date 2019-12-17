@@ -10,7 +10,7 @@ module main_mpi
 
 contains
 
-    subroutine mpi_routine(verbosity, direct_flag, npw, dim_G, grid, b, export_dir, loop_size, loop_array, I_ab)
+    subroutine mpi_routine(verbosity, direct_flag, npw, dim_G, grid, nbnd, wfc_all, b, export_dir, loop_size, loop_array, I_ab)
     ! evaluates inner routine looping over loop_array values
     ! returns I_zz_out -- a portion of the I_zz value
     
@@ -41,6 +41,8 @@ contains
         real(dp), dimension(3,3), intent(out)           :: I_ab
         real(dp), dimension(9)           :: test
         real(dp), dimension(3,3)                        :: b
+        integer, intent(in)                             :: nbnd
+        complex(dp), dimension(2,nbnd,npw), intent(in)  :: wfc_all
 !!!!!!!!!! endnew
 
         call mpi_get_var(nproc, myrank, is_root)
@@ -76,7 +78,7 @@ contains
         ! compute inner routine
         ! call inner_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, myloop_size, myloop_array, myI_zz)
 !!!!!!!!!! new
-        call inner_routine(verbosity, direct_flag, npw, dim_G, grid, b, export_dir, myloop_size, myloop_array, myI_ab)
+        call inner_routine(verbosity, direct_flag, npw, dim_G, grid, nbnd, wfc_all, b, export_dir, myloop_size, myloop_array, myI_ab)
 !!!!!!!!!! new
 
 !!!!!!!!!! new

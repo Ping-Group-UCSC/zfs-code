@@ -17,17 +17,18 @@ module main_inner
 
 contains
 
-    subroutine inner_routine(verbosity, direct_flag, npw, dim_G, grid, b, export_dir, loop_size, loop_array, I_ab_out)
+    subroutine inner_routine(verbosity, direct_flag, npw, dim_G, grid, nbnd, wfc_all, b, export_dir, loop_size, loop_array, I_ab_out)
     ! evaluates inner routine looping over loop_array values
     ! returns I_zz_out -- a portion of the I_zz value
     
         ! input variables
-        integer, intent(in)                             :: npw, dim_G, loop_size
+        integer, intent(in)                             :: npw, dim_G, loop_size, nbnd
         integer, dimension(npw, dim_G), intent(in)      :: grid
         character(len=256), intent(in)                  :: export_dir
         integer, dimension(loop_size,3), intent(in)     :: loop_array
         logical, intent(in)                             :: direct_flag
         character(len=16), intent(in)                   :: verbosity
+        complex(dp), dimension(2,nbnd,npw), intent(in)  :: wfc_all
 
         ! internal variables
         character(len=256)                              :: file_w1, file_w2
@@ -63,15 +64,28 @@ contains
         I_ab_out = 0.0_dp
         do i_dumb = 1, loop_size
 
-        !< Define file_w1 and file_w2 names >!
-            call file_w_name(export_dir, loop_array(i_dumb,:), file_w1, file_w2)
+        !< Transfer wfc's in use ( in principle this can be skipped ) >!
+            if ( loop_array(i_dumb,1) == 1 ) then
+                wfc1 = wfc_all(1, loop_array(i_dumb,3), :)
+                wfc2 = wfc_all(1, loop_array(i_dumb,2), :)
+            else if ( loop_array(i_dumb,1) == 3 ) then
+                wfc1 = wfc_all(2, loop_array(i_dumb,3), :)
+                wfc2 = wfc_all(2, loop_array(i_dumb,2), :)
+            else if ( loop_array(i_dumb,1) == 2 ) then
+                wfc1 = wfc_all(2, loop_array(i_dumb,3), :)
+                wfc2 = wfc_all(1, loop_array(i_dumb,2), :)
+            else
+                print *, "Invalid ispin,", loop_array(i_dumb,1), "exiting ... "
+                call exit(1)
+            end if
 
-        !< Read in complex array of wfc 1 and 2 (wfc1, wfc2) >!
-            allocate (wfc1(npw), wfc2(npw))
-            call read_wfc(file_w1,npw,wfc1)
-            call read_wfc(file_w2,npw,wfc2)
+        ! !< Define file_w1 and file_w2 names >!
+        !     call file_w_name(export_dir, loop_array(i_dumb,:), file_w1, file_w2)
 
-            
+        ! !< Read in complex array of wfc 1 and 2 (wfc1, wfc2) >!
+        !     allocate (wfc1(npw), wfc2(npw))
+        !     call read_wfc(file_w1,npw,wfc1)
+        !     call read_wfc(file_w2,npw,wfc2)
 
         !< Calculate f1(G), f2(-G), f3(G) >!
             allocate (f1_G(npw), f2_G(npw), f2_minusG(npw), f3_G(npw))

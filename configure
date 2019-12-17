@@ -157,6 +157,7 @@ function createMakeInc(){
 FC = ${mpidir}/bin/${mpicom}
 
 flags = \\
+    -ffree-line-length-none \\
     -pthread \\
     -fopenmp \\
     -lfftw3 \\

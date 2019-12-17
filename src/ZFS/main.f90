@@ -62,6 +62,7 @@ program main
 
 
     ! new
+    integer                     :: nbnd
     complex(dp), allocatable    :: wfc_all(:,:,:)
 
 
@@ -113,7 +114,15 @@ program main
     call init_loop_array(band_min, band_max, occ_up, occ_dn, loop_size, loop_array)
 
     ! Read in all wfc
+    if ( is_root ) then
+        print *, indent, "Reading wavefunction files from ", trim(export_dir)
+        print *, indent, indent, "this may take some time ..."
+    end if
     call read_all_wfc(npw, export_dir, loop_size, loop_array, wfc_all)
+    if ( is_root ) then
+        print *, indent, "Done reading wavefunction files!"
+        print *
+    end if
 
     ! Report information
     if ( is_root ) then
@@ -122,14 +131,15 @@ program main
         print *, indent, "nspin, nbnd, npw = ", shape(wfc_all)
         print *
     end if
+
+    nbnd = size(wfc_all(1,:,1))
     
     ! if ( is_root ) call check_wfc_all(size(wfc_all(:,1,1)), size(wfc_all(1,:,1)), size(wfc_all(1,1,:)), wfc_all)
 
-    ! call exit(0)
-
 !< Call to the main subroutine which compute I_ab >!
     if ( is_root ) print *, indent, "computing D_ab"
-    call mpi_routine(verbosity, direct_flag, npw, dim_G, grid, cell%b, export_dir, loop_size, loop_array, I_ab)
+    ! call mpi_routine(verbosity, direct_flag, npw, dim_G, grid, cell%b, export_dir, loop_size, loop_array, I_ab)
+    call mpi_routine(verbosity, direct_flag, npw, dim_G, grid, nbnd, wfc_all, cell%b, export_dir, loop_size, loop_array, I_ab)
 
 
 !< Calculate ZFS >!

@@ -13,7 +13,7 @@ program main
     use mpi_var,           only : mpi_get_var
     use intro_outro,       only : intro, outro
     use input,             only : command_input, parse_input, print_input
-    use loop_var,          only : init_loop_array
+    use loop_var,          only : init_loop_array, read_all_wfc
     use readmod,           only : read_length, read_grid, read_wfc, read_cell
     use printmod,          only : printIntegerArray, printComplexArray, print_cell, print_real_array, print_eigs
     use main_inner,        only : inner_routine
@@ -44,7 +44,7 @@ program main
     integer                     :: loop_size
     ! dimensions and file names
     integer                     :: npw, dim_G = 3
-    character(len=256)          :: file_G, file_w1, file_w2, file_cell
+    character(len=256)          :: file_G, file_wfc, file_cell
     ! main functions
     integer, allocatable        :: grid(:,:)                                            ! dim (npw,3)
     complex(dp), allocatable    :: wfc1(:), wfc2(:)                                     ! dim (npw) defined over grid
@@ -61,6 +61,10 @@ program main
     real(dp), dimension(3)      :: eigs
 
 
+    ! new
+    complex(dp), allocatable    :: wfc_all(:,:,:)
+
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !                            Beginning program                              !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -74,7 +78,7 @@ program main
         call intro(prog)
     end if
 
-!< Read input file (file_G,file_w1,file_w2,alat)>!
+!< Read input file >!
     call command_input(file_in)
     call parse_input(file_in, export_dir, band_min, band_max, occ_up, occ_dn, alat, direct_flag, verbosity)
     if ( is_root ) then
@@ -108,14 +112,23 @@ program main
     ! create loop_array = ((ispin, i, j) ... )
     call init_loop_array(band_min, band_max, occ_up, occ_dn, loop_size, loop_array)
 
+    ! Read in all wfc
+    call read_all_wfc(npw, export_dir, loop_size, loop_array, wfc_all)
+
+    ! Report information
     if ( is_root ) then
-        print "(a5,a29,i9)", indent, "number of steps to compute = ", loop_size
+        print "(a5,a29,i15)", indent, "number of steps to compute = ", loop_size
         if ( loop_size .le. 20 ) call printIntegerArray(loop_array, loop_size, 3, loop_size)
+        print *, indent, "nspin, nbnd, npw = ", shape(wfc_all)
         print *
-
-        print *, indent, "computing D_ab"
     end if
+    
+    ! if ( is_root ) call check_wfc_all(size(wfc_all(:,1,1)), size(wfc_all(1,:,1)), size(wfc_all(1,1,:)), wfc_all)
 
+    ! call exit(0)
+
+!< Call to the main subroutine which compute I_ab >!
+    if ( is_root ) print *, indent, "computing D_ab"
     call mpi_routine(verbosity, direct_flag, npw, dim_G, grid, cell%b, export_dir, loop_size, loop_array, I_ab)
 
 
@@ -149,3 +162,28 @@ program main
 
 
 end program main
+
+
+subroutine check_wfc_all(nspin, nbnd, npw, wfc_all)
+
+    use params, only : dp
+    use printmod, only : printComplexArray
+
+    integer, intent(in)                                     :: nspin, nbnd, npw
+    complex(dp), dimension(nspin, nbnd, npw), intent(in)    :: wfc_all
+
+    integer :: ispin, iband
+
+
+    do ispin = 1, nspin
+        do iband = 1, nbnd
+            print *, "Here is wfc ", ispin, " ", iband
+            call printComplexArray(wfc_all(ispin,iband,:), npw, npw)
+            print *
+            print *
+        end do
+    end do
+
+
+
+end subroutine check_wfc_all

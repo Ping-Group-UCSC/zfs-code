@@ -10,10 +10,7 @@ module main_mpi
 
 contains
 
-    ! subroutine mpi_routine(verbosity, direct_flag, npw, dim_G, grid, export_dir, loop_size, loop_array, I_zz)
-!!!!!!!!!! new
     subroutine mpi_routine(verbosity, direct_flag, npw, dim_G, grid, b, export_dir, loop_size, loop_array, I_ab)
-!!!!!!!!!! endnew
     ! evaluates inner routine looping over loop_array values
     ! returns I_zz_out -- a portion of the I_zz value
     

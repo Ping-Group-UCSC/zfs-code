@@ -148,5 +148,73 @@ contains
 
     end subroutine init_loop_array
 
+    subroutine wfc_filename(export_dir, ispin, iband, filename)
+    ! subroutine for generating wfc file names to be read
+    ! filename should have the form:
+    !       export_dir/wfc(ispin)_(iband).txt
+        
+        ! input variables
+        character (len=256), intent(in)     :: export_dir
+        integer, intent(in)                 :: ispin, iband
+        ! internal variables
+        character(len=10)                   :: str_ispin, str_iband
+        ! output variables
+        character (len=256), intent(out)    :: filename
+
+        ! convert integers to strings
+        write (str_ispin, "(i5)") ispin
+        write (str_iband, "(i5)") iband
+
+        ! define file name with full path
+        filename = trim(export_dir) // "/wfc" // trim(adjustl(str_ispin)) // "_" // trim(adjustl(str_iband)) // ".txt"
+
+    end subroutine wfc_filename
+
+
+    subroutine read_all_wfc(npw, export_dir, loop_size, loop_array, wfc_all)
+
+        use params, only : dp
+        use readmod, only : read_wfc
+
+        ! input variables
+        integer, intent(in)                                 :: npw, loop_size
+        integer, dimension(loop_size,3), intent(in)         :: loop_array
+        character(len=256), intent(in)                      :: export_dir
+        ! internal variables
+        character(len=256)                                  :: filename
+        integer                                             :: nbnd
+        integer                                             :: ispin, iband ! dummy index
+        complex(dp), dimension(npw)                         :: wfc_part
+        ! output variables
+        complex(dp), allocatable, intent(out)               :: wfc_all(:,:,:)
+
+        ! note dimension of wfc_all = (spin, nbnd, npw)
+        ! note that unoccupied wfc states will not be read and therfore equal zero
+        ! e.g. to acces band 39 of spin = 2 then wfc_all(2,39,:)
+
+        ! TODO add timing for this
+        ! TODO this should be embeded in main_mpi working with my_loop_size and my_loop_array instead of current
+        !       current code is an intermediate step of the above idea
+
+        nbnd = maxval(loop_array(:,3)) - minval(loop_array(:,3)) + 1
+        allocate(wfc_all(2, nbnd, npw))
+        wfc_all = 0.0_dp
+
+        ! should do a loop over loop_array requires smaller allocation then above
+        ! do i = 1, loop_size
+        !     call wfc_filename(export_dir, loop_array(i, 1), band, filename)
+        ! end do
+
+        do ispin = 1, 2
+            do iband = 1, nbnd
+                call wfc_filename(export_dir, ispin, iband, filename)
+                ! print *, "Reading wfc file: ", filename
+                call read_wfc(filename, npw, wfc_part)
+                wfc_all(ispin, iband, :) = wfc_part
+            end do
+        end do
+
+    end subroutine read_all_wfc
+
 
 end module loop_var

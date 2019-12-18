@@ -19,7 +19,7 @@ program main
     use main_inner,        only : inner_routine
     use main_mpi,          only : mpi_routine
     use zfs_calc,          only : calc_D_ab, zfs_parameters
-    use linalg,            only : eigenvalues_symmetric
+    ! use linalg,            only : eigenvalues_symmetric
     use mpi
 
     implicit none
@@ -150,16 +150,16 @@ program main
         call calc_D_ab(cell%omega, I_ab, D_en, D_fr1, D_fr2)
         call print_real_array(D_fr1, 3, 3)
 
-        print *
-        print *, "================================"
-        print *, "Computing Eigenvalues of D_ab"
-        call eigenvalues_symmetric(D_fr1, 3, eigs, evecs)
-        call print_eigs(eigs, evecs, 3)
+        ! print *
+        ! print *, "================================"
+        ! print *, "Computing Eigenvalues of D_ab"
+        ! call eigenvalues_symmetric(D_fr1, 3, eigs, evecs)
+        ! call print_eigs(eigs, evecs, 3)
 
-        print *
-        print *, "================================"
-        print *, "Zero Field Splitting Parameters"
-        call zfs_parameters(eigs, evecs)
+        ! print *
+        ! print *, "================================"
+        ! print *, "Zero Field Splitting Parameters"
+        ! call zfs_parameters(eigs, evecs)
     end if
 
 

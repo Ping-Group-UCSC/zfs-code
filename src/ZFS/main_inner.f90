@@ -1,17 +1,14 @@
 module main_inner
 
-    use params,            only : dp
-    use loop_var,          only : file_w_name
-    use readmod,           only : read_wfc
-    use fg_calc,           only : convolution, reflection, fftw_convolution
-    ! use zfs_calc,          only : calc_rho, calc_I_zz
-!!!!!!!! new
-    use zfs_calc,          only : calc_rho, calc_I_ab
-!!!!!!!! endnew
-    use mpi_var,           only : mpi_get_var
-    use convtime,          only : convtime_sub
-    use writemod,          only : write_grid, write_wfc, write_over_grid
-    use fftwmod,           only : calc_grid_dim, reshape_wfc
+    use params  
+    use loop_var
+    use readmod 
+    use fg_calc 
+    use zfs_calc
+    use mpi_var 
+    use convtime
+    use writemod
+    use fftwmod 
 
     implicit none
 

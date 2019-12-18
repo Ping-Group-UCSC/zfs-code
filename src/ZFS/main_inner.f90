@@ -66,14 +66,14 @@ contains
 
         !< Transfer wfc's in use ( in principle this can be skipped ) >!
             if ( loop_array(i_dumb,1) == 1 ) then
-                wfc1 = wfc_all(1, loop_array(i_dumb,3), :)
-                wfc2 = wfc_all(1, loop_array(i_dumb,2), :)
+                wfc2 = wfc_all(1, loop_array(i_dumb,3), :)
+                wfc1 = wfc_all(1, loop_array(i_dumb,2), :)
             else if ( loop_array(i_dumb,1) == 3 ) then
-                wfc1 = wfc_all(2, loop_array(i_dumb,3), :)
-                wfc2 = wfc_all(2, loop_array(i_dumb,2), :)
+                wfc2 = wfc_all(2, loop_array(i_dumb,3), :)
+                wfc1 = wfc_all(2, loop_array(i_dumb,2), :)
             else if ( loop_array(i_dumb,1) == 2 ) then
-                wfc1 = wfc_all(2, loop_array(i_dumb,3), :)
-                wfc2 = wfc_all(1, loop_array(i_dumb,2), :)
+                wfc2 = wfc_all(1, loop_array(i_dumb,3), :)
+                wfc1 = wfc_all(2, loop_array(i_dumb,2), :)
             else
                 print *, "Invalid ispin,", loop_array(i_dumb,1), "exiting ... "
                 call exit(1)

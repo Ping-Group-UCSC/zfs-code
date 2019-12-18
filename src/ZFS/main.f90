@@ -146,7 +146,7 @@ program main
     if ( is_root ) then
         print *
         print *, "================================"
-        print *, "D_ab (GHz) = "
+        print *, "Matrix D_ab (GHz) = "
         call calc_D_ab(cell%omega, I_ab, D_en, D_fr1, D_fr2)
         call print_real_array(D_fr1, 3, 3)
 

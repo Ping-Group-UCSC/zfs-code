@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import signal # for handling ctrl-c
 import sys
 import os
 import numpy as np
@@ -23,6 +24,12 @@ from vaspwfc import vaspwfc
 Defining functions
 '''
 
+def handler(signal_received, frame):
+    # Handle any cleanup here
+    sys.stderr.write('\nSIGINT or CTRL-C detected. Exiting gracefully\n')
+    sys.exit(1)
+
+
 def die(message):
     sys.stderr.write("Error: {}\n".format(message))
     sys.exit(1)
@@ -36,7 +43,7 @@ def checkFile(filename):
 def readNBND():
     checkFile('OUTCAR')
     with open('OUTCAR') as f:
-        for line in f.readlines():
+        for line in f:
             if 'NBANDS=' in line:
                 return int(line.split('NBANDS=')[1])
     return 0
@@ -49,7 +56,7 @@ def writeGrid(wav, outdir, kpt=1):
     grid = wav.gvectors(ikpt=kpt)
     with open(outfile, 'w') as f:
         for i in range( len(grid) ):
-            f.write( "  {}  {}  {}\n".format( grid[i][0], grid[i][1], grid[i][2] ) )
+            f.write( "  {}  {}  {}\n".format(*grid[i]) )
     return None
 
 
@@ -57,6 +64,7 @@ def writeWFC(wav, outdir, nbnd, kpt=1):
     # write wfc files
     for ispin in range(1,3):
         sys.stdout.write(indent + indent + "Writing {} wfc of spin {} ... ".format(nbnd, ispin))
+        sys.stdout.flush()
         for iband in range(1,nbnd+1):
             outfile = os.path.join( outdir, "wfc{}_{}.txt".format(ispin, iband) )
             wfc_g = wav.readBandCoeff(ispin=ispin, ikpt=kpt, iband=iband)
@@ -82,6 +90,9 @@ main program defined below
 '''
 
 def main():
+
+    # call handler if SIGINT or ctrl-c received
+    signal.signal(signal.SIGINT, handler)
     
     help_message = "\
     This helper script is used to create input for the ZFS code from a VASP output. \n\

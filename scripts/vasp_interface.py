@@ -49,6 +49,35 @@ def readNBND():
     return 0
 
 
+def calcB(wav):
+    # compute reciprocal lattice vectors form real space lattice parameters
+    pre = 2 * np.pi / np.dot( wav._Acell[0], np.cross( wav._Acell[1], wav._Acell[2] ) )
+    b = np.zeros((3,3), dtype=float)
+    for i in range(3):
+        b[i] = pre * np.cross( wav._Acell[ (i + 1) % 3 ], wav._Acell[ (i + 2) % 3 ] )
+    return b
+
+
+def writeCell(wav, outdir):
+    # write cell
+    bohr = 1.8897259886 # convert angstrom to bohr
+
+    outfile = os.path.join(outdir, "cell.txt")
+    sys.stdout.write(indent + indent + "Writing Cell to '{}'\n".format(outfile))
+
+    omega = wav._Omega * bohr**3    # volume
+    a = wav._Acell * bohr           # real space vectors
+    b = calcB(wav) * bohr           # reciprocal vectors calculated as above
+
+    with open(outfile, 'w') as f:
+        f.write( "{}\n".format(omega) )
+        for i in range(3):
+            f.write( "  {}  {}  {}\n".format(*a[i]) )
+        for i in range(3):
+            f.write( "  {}  {}  {}\n".format(*b[i]) )
+    return None
+
+
 def writeGrid(wav, outdir, kpt=1):
     # write grid
     outfile = os.path.join(outdir, "grid.txt")
@@ -124,17 +153,21 @@ def main():
     sys.stdout.write(indent + indent + "nbnd = {}\n".format(nbnd))
     # define wave as from vaspwfc module
     sys.stdout.write(indent + indent + "Checking WAVECAR ... ")
+    sys.stdout.flush()
     checkFile('WAVECAR')
     wav = vaspwfc('WAVECAR')
     sys.stdout.write("good\n")
+    sys.stdout.flush()
 
     # folder where all files will be dumped to
     outdir = 'Converted_Export'
     if not os.path.exists(outdir):
         os.mkdir(outdir)
     sys.stdout.write(indent + indent + "Output to be written to '{}'\n".format(outdir))
+    sys.stdout.flush()
 
-    # write grid and wfc
+    # write cell, grid, and wfc
+    writeCell(wav, outdir)
     writeGrid(wav, outdir)
     writeWFC(wav, outdir, nbnd)
     

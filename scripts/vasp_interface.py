@@ -70,11 +70,11 @@ def writeCell(wav, outdir):
     b = calcB(wav) * bohr           # reciprocal vectors calculated as above
 
     with open(outfile, 'w') as f:
-        f.write( "{}\n".format(omega) )
+        f.write( "  {:20.10e}\n".format(omega) )
         for i in range(3):
-            f.write( "  {}  {}  {}\n".format(*a[i]) )
+            f.write( "  {:20.10e}  {:20.10e}  {:20.10e}\n".format(*a[i]) )
         for i in range(3):
-            f.write( "  {}  {}  {}\n".format(*b[i]) )
+            f.write( "  {:20.10e}  {:20.10e}  {:20.10e}\n".format(*b[i]) )
     return None
 
 
@@ -85,7 +85,7 @@ def writeGrid(wav, outdir, kpt=1):
     grid = wav.gvectors(ikpt=kpt)
     with open(outfile, 'w') as f:
         for i in range( len(grid) ):
-            f.write( "  {}  {}  {}\n".format(*grid[i]) )
+            f.write( "  {:5d}  {:5d}  {:5d}\n".format(*grid[i]) )
     return None
 
 
@@ -99,7 +99,7 @@ def writeWFC(wav, outdir, nbnd, kpt=1):
             wfc_g = wav.readBandCoeff(ispin=ispin, ikpt=kpt, iband=iband)
             with open(outfile, 'w') as f:
                 for i in range( len(wfc_g) ):
-                    f.write( "( {} , {} )\n".format( wfc_g[i].real,  wfc_g[i].imag ) )
+                    f.write( "( {:20.10e} , {:20.10e} )\n".format( wfc_g[i].real,  wfc_g[i].imag ) )
         sys.stdout.write("done\n")
     return None
 

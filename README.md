@@ -73,7 +73,7 @@ Flow of the ZFS Code:
 4. calculate ρ(G-G')
 5. calculate D_(ab); including ZFS parameter
 
-Author
+Author(s)
 ------------------------------------
-Original Version Created Wed. June 19th 2019 by Tyler J. Smart
+Tyler J. Smart (tjsmart)
 

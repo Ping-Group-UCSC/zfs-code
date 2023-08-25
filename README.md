@@ -7,6 +7,11 @@ This code calculates the ZFS parameter as in the article:
 
 [M. J. Rayson and P. R. Briddon, *Physical Review B* **77**, 035119 (2008).](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.77.035119 "First principles method for the calculation of zero-field splitting tensors in periodic systems")
 
+For citation of this code, please cite this paper:
+
+[Tyler J. Smart, Kejun Li, Junqing Xu & Yuan Ping, *npj Computational Materials* **7**, 59 (2021).](https://www.nature.com/articles/s41524-021-00525-5 "Intersystem crossing and exciton–defect coupling of spin defects in hexagonal boron nitride") 
+
+
 Prerequisites:
 ------------------------------------
 * MPI Library (e.g. [Intel MPI](https://software.intel.com/en-us/mpi-library), [Open MPI](https://www.open-mpi.org/))

@@ -1,0 +1,27 @@
+#!/bin/bash
+#SBATCH --job-name=pwx
+#SBATCH --output=zfs.%j
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=16
+#SBATCH --time=24:00:00
+#SBATCH --partition=normal
+##SBATCH --dependency=afterany:48083
+#SBATCH --account=normal
+##SBATCH --account=cfn307395
+
+
+
+module load intel mpi
+#module load openmpi
+module load FFTW
+#Add fft library
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/ohpc/pub/libs/gnu/openmpi/fftw/3.3.4/lib
+
+PWDIR="/export/data/share/wufeng/programs-intel2017.5/qe-6.1-scal/bin"
+ZFSDIR="/export/data/share/szhan213/Programs/zfs-code-master/bin"
+CONVDIR="/export/data/share/szhan213/Programs/zfs-code-master/scripts"
+
+
+$CONVDIR/conv_export.sh di . $PWDIR
+$ZFSDIR/zfs.x -inp zfs.in > zfs.out
+#$ZFSDIR/zfs.x -inp short.in > short.out

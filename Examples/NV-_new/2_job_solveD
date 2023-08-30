@@ -1,0 +1,18 @@
+#!/bin/bash
+
+module load intel mpi
+#module load openmpi
+module load FFTW
+#Add fft library
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/ohpc/pub/libs/gnu/openmpi/fftw/3.3.4/lib
+
+PWDIR="/export/data/share/wufeng/programs-intel2017.5/qe-6.1-scal/bin"
+ZFSDIR="/export/data/share/szhan213/Programs/zfs-code-master/bin"
+CONVDIR="/export/data/share/szhan213/Programs/zfs-code-master/scripts"
+
+
+python3 ./read_dab.py > ZFS_value.txt
+#Chekc the result D value
+#python3 $CONVDIR/zfs_scrap.py "./zfs.out"
+
+

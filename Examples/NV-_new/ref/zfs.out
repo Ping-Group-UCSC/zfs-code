@@ -1,0 +1,43 @@
+ 
+ Program ZFS | TIME: begins on 08/29/2023 at 14:36:54    
+ 
+ Input file read from: zfs.in
+      Parsing input file
+      Read Grid and wfc from  :  Converted_Export
+      Bands to be included    :     1(Min)   128(Max)
+      Occupied states         :   128(Up)    126(Dn) 
+      Lattice Parameter (Ang) :   7.136588
+      Convolution             :  FFT
+      Verbosity               :  low
+ 
+ 
+ ================================
+ Beginning Calculation of ZFS
+ 
+     Reading wavefunction files from Converted_Export
+         this may take some time ...
+     Done reading wavefunction files!
+ 
+     number of steps to compute =           32131
+     nspin, nbnd, npw =            2         128        1357
+ 
+     computing D_ab
+         progress: 0.10       cpu_time:  0h 0m13.45s
+         progress: 0.20       cpu_time:  0h 0m26.65s
+         progress: 0.30       cpu_time:  0h 0m39.58s
+         progress: 0.40       cpu_time:  0h 0m52.52s
+         progress: 0.50       cpu_time:  0h 1m 5.45s
+         progress: 0.60       cpu_time:  0h 1m18.39s
+         progress: 0.70       cpu_time:  0h 1m31.32s
+         progress: 0.80       cpu_time:  0h 1m44.26s
+         progress: 0.90       cpu_time:  0h 1m57.19s
+         progress: 1.00       cpu_time:  0h 2m10.13s
+ 
+ ================================
+ Matrix D_ab (GHz) = 
+         0.000001     -0.645796     -0.645796
+        -0.645796     -0.000000      0.645799
+        -0.645796      0.645799     -0.000000
+ 
+ Done :) | TIME: calculation ends on 08/29/2023 at 14:39:04    
+ 
